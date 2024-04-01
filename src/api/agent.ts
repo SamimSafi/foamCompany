@@ -54,6 +54,7 @@ import { IBranch, IBranchParams } from 'src/@types/foamCompanyTypes/branch';
 import { IUnitOfMeasure, IUnitOfMeasureParams } from 'src/@types/foamCompanyTypes/unitOfMeasure';
 import { IExpenseType, IExpenseTypeParams } from 'src/@types/foamCompanyTypes/expenseType';
 import { ICustomer, ICustomerParams } from 'src/@types/foamCompanyTypes/customer';
+import { ISupplier, ISupplierParams } from 'src/@types/foamCompanyTypes/Supplier';
 
  //axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = 'http://localhost:7073/api/';
@@ -528,6 +529,19 @@ const  ExpenseType= {
     axios.get<any>(`/ExpenseType/GetDropDownList/${departmentId}`, { withCredentials: true }),
 };
 
+// Supplier
+const Supplier = {
+  create: (Supplier: ISupplier) => requests.post<void>('/Supplier', Supplier),
+  getList: (param: ISupplierParams) =>
+    axios.post<any>(`/Supplier/GetList`, param, { withCredentials: true }),
+  update: (Supplier: ISupplier) =>
+    requests.put<void>(`/Supplier/${Supplier.id}`, Supplier),
+  delete: (id: number, remark: string) =>
+    axios.delete<void>(`/Supplier/${id}`, { data: remark }),
+  DDl: (departmentId: any) =>
+    axios.get<any>(`/Supplier/GetDropDownList/${departmentId}`, { withCredentials: true }),
+};
+
 const agent = {
   Logins,
   Permissions,
@@ -553,7 +567,8 @@ const agent = {
   UniteOfMeasure,
   ExpenseType,
   Investor,
-  Customer
+  Customer,
+  Supplier
 };
 
 export default agent;

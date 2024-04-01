@@ -31,6 +31,7 @@ import uniteOfMeasureStore from './foamCompanyStores/uniteOfMeasureStore';
 import ExpenseTypeStore from './foamCompanyStores/ExpenseTypeStore';
 import investorStore from './foamCompanyStores/investorStore';
 import customerStore from './foamCompanyStores/customerStore';
+import supplierStore from './foamCompanyStores/supplierStore';
 
 
 interface Store {
@@ -84,6 +85,7 @@ interface Store {
   ExpenseTypeStore:ExpenseTypeStore;
   investorStore:investorStore;
   customerStore:customerStore;
+  supplierStore:supplierStore;
 }
 //Include All store below
 export const store: Store = {
@@ -124,6 +126,7 @@ uniteOfMeasureStore: new uniteOfMeasureStore(),
 ExpenseTypeStore: new ExpenseTypeStore(),
 investorStore: new investorStore(),
 customerStore: new customerStore(),
+supplierStore: new supplierStore(),
 
 };
 
