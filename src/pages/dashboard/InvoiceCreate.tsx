@@ -7,6 +7,7 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import InvoiceNewEditForm from 'src/sections/@dashboard/invoice/new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ export default function InvoiceCreate() {
             { name: 'New invoice' },
           ]}
         />
+        <InvoiceNewEditForm />
       </Container>
     </Page>
   );

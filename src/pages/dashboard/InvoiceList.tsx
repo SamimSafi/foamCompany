@@ -41,6 +41,8 @@ import {
   TableHeadCustom,
   TableSelectedActions,
 } from '../../components/table';
+import { InvoiceTableRow, InvoiceTableToolbar } from 'src/sections/@dashboard/invoice/list';
+import { Invoice } from 'src/@types/invoice';
 // sections
 
 // ----------------------------------------------------------------------
@@ -133,6 +135,23 @@ export default function InvoiceList() {
     navigate(PATH_DASHBOARD.invoice.view(id));
   };
 
+  const dataFiltered = applySortFilter({
+    tableData,
+    comparator: getComparator(order, orderBy),
+    filterName,
+    filterService,
+    filterStatus,
+    filterStartDate,
+    filterEndDate,
+  });
+
+  const isNotFound =
+    (!dataFiltered.length && !!filterName) ||
+    (!dataFiltered.length && !!filterStatus) ||
+    (!dataFiltered.length && !!filterService) ||
+    (!dataFiltered.length && !!filterEndDate) ||
+    (!dataFiltered.length && !!filterStartDate);
+
   const denseHeight = dense ? 56 : 76;
 
   const getLengthByStatus = (status: string) =>
@@ -178,9 +197,7 @@ export default function InvoiceList() {
         />
 
         <Card sx={{ mb: 5 }}>
-          <Scrollbar>
-          
-          </Scrollbar>
+          <Scrollbar></Scrollbar>
         </Card>
 
         <Card>
@@ -205,9 +222,105 @@ export default function InvoiceList() {
 
           <Divider />
 
+          <InvoiceTableToolbar
+            filterName={filterName}
+            filterService={filterService}
+            filterStartDate={filterStartDate}
+            filterEndDate={filterEndDate}
+            onFilterName={handleFilterName}
+            onFilterService={handleFilterService}
+            onFilterStartDate={(newValue) => {
+              setFilterStartDate(newValue);
+            }}
+            onFilterEndDate={(newValue) => {
+              setFilterEndDate(newValue);
+            }}
+            optionsService={SERVICE_OPTIONS}
+          />
 
           <Scrollbar>
-            
+            <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+              {selected.length > 0 && (
+                <TableSelectedActions
+                  dense={dense}
+                  numSelected={selected.length}
+                  rowCount={tableData.length}
+                  onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                      checked,
+                      tableData.map((row) => row.id)
+                    )
+                  }
+                  actions={
+                    <Stack spacing={1} direction="row">
+                      <Tooltip title="Sent">
+                        <IconButton color="primary">
+                          <Iconify icon={'ic:round-send'} />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Download">
+                        <IconButton color="primary">
+                          <Iconify icon={'eva:download-outline'} />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Print">
+                        <IconButton color="primary">
+                          <Iconify icon={'eva:printer-fill'} />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Delete">
+                        <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
+                          <Iconify icon={'eva:trash-2-outline'} />
+                        </IconButton>
+                      </Tooltip>
+                    </Stack>
+                  }
+                />
+              )}
+
+              <Table size={dense ? 'small' : 'medium'}>
+                <TableHeadCustom
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={tableData.length}
+                  numSelected={selected.length}
+                  onSort={onSort}
+                  onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                      checked,
+                      tableData.map((row) => row.id)
+                    )
+                  }
+                />
+
+                <TableBody>
+                  {dataFiltered
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => (
+                      <InvoiceTableRow
+                        key={row.id}
+                        row={row}
+                        selected={selected.includes(row.id)}
+                        onSelectRow={() => onSelectRow(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                      />
+                    ))}
+
+                  <TableEmptyRows
+                    height={denseHeight}
+                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                  />
+
+                  <TableNoData isNotFound={isNotFound} />
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Scrollbar>
 
           <Box sx={{ position: 'relative' }}>
@@ -235,3 +348,56 @@ export default function InvoiceList() {
 
 // ----------------------------------------------------------------------
 
+function applySortFilter({
+  tableData,
+  comparator,
+  filterName,
+  filterStatus,
+  filterService,
+  filterStartDate,
+  filterEndDate,
+}: {
+  tableData: Invoice[];
+  comparator: (a: any, b: any) => number;
+  filterName: string;
+  filterStatus: string;
+  filterService: string;
+  filterStartDate: Date | null;
+  filterEndDate: Date | null;
+}) {
+  const stabilizedThis = tableData.map((el, index) => [el, index] as const);
+
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+
+  tableData = stabilizedThis.map((el) => el[0]);
+
+  if (filterName) {
+    tableData = tableData.filter(
+      (item: Record<string, any>) =>
+        item.invoiceNumber.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+        item.invoiceTo.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+    );
+  }
+
+  if (filterStatus !== 'all') {
+    tableData = tableData.filter((item: Record<string, any>) => item.status === filterStatus);
+  }
+
+  if (filterService !== 'all') {
+    tableData = tableData.filter((item) => item.items.some((c) => c.service === filterService));
+  }
+
+  if (filterStartDate && filterEndDate) {
+    tableData = tableData.filter(
+      (item: Record<string, any>) =>
+        item.createDate.getTime() >= filterStartDate.getTime() &&
+        item.createDate.getTime() <= filterEndDate.getTime()
+    );
+  }
+
+  return tableData;
+}

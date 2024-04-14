@@ -25,14 +25,14 @@ export default function SupplierCreate() {
   const isEdit = pathname.includes('edit');
 
   return (
-    <Page title={translate('Employee.CreateTitle')}>
+    <Page title={translate('Supplier.CreateTitle')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? `${translate('Employee.CreateEmployee')}` : `${translate('Employee.UpdateEmployee')}`}
+          heading={!isEdit ? `${translate('Supplier.CreateSupplier')}` : `${translate('Supplier.UpdateSupplier')}`}
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
-            { name: `${translate('Employee.EmployeeList')}`, href: PATH_DASHBOARD.Employee.list },
-            { name: !isEdit ? `${translate('Employee.NewEmployee')}` : `${translate('Employee.UpdateEmp')}` },
+            { name: `${translate('Supplier.SupplierList')}`, href: PATH_DASHBOARD.Employee.list },
+            { name: !isEdit ? `${translate('Supplier.NewSupplier')}` : `${translate('Supplier.UpdateEmp')}` },
           ]}
         />
         <SupplierNewEditForm />

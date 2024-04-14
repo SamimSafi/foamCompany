@@ -83,11 +83,7 @@ const navConfig = [
           {
             title: 'CommonLookUps',
             path: '#5',
-            roles: [
-              'Province-GetList',
-              'District-GetList',
-              'Language-GetList',
-            ],
+            roles: ['Province-GetList', 'District-GetList', 'Language-GetList'],
             children: [
               {
                 title: 'province',
@@ -112,11 +108,7 @@ const navConfig = [
           {
             title: 'HRLookupTables',
             path: '#5',
-            roles: [
-              'ContractType-GetAll',
-              'PositionTitle-GetAll',
-              'JobPosition-GetAll',
-            ],
+            roles: ['ContractType-GetAll', 'PositionTitle-GetAll', 'JobPosition-GetAll'],
             children: [
               {
                 title: 'contractType',
@@ -235,7 +227,18 @@ const navConfig = [
           },
         ],
       },
-    
+      // Employee Attendance
+      {
+        title: 'invoice',
+        path: '#1',
+        icon: ICONS.calendar,
+        children: [
+          {
+            title: 'invoice',
+            path: PATH_DASHBOARD.invoice.list,
+          },
+        ],
+      },
     ],
   },
 ];
