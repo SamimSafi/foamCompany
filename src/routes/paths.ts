@@ -110,6 +110,14 @@ export const PATH_DASHBOARD = {
     edit: path(ROOTS_DASHBOARD, '/PositionTitle/edit'),
     detail: path(ROOTS_DASHBOARD, '/PositionTitle/detail'),
   },
+  // PositionTitle
+  Goods: {
+    root: path(ROOTS_DASHBOARD, '/Goods'),
+    list: path(ROOTS_DASHBOARD, '/Goods/list'),
+    new: path(ROOTS_DASHBOARD, '/Goods/new'),
+    edit: path(ROOTS_DASHBOARD, '/Goods/edit'),
+    detail: path(ROOTS_DASHBOARD, '/Goods/detail'),
+  },
 
   // JobPosition
   JobPosition: {

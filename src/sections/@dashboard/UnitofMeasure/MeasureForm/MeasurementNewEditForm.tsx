@@ -36,14 +36,17 @@ export default observer(function MeasurementNewEditForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewContractTypeSchema = Yup.object().shape({
-    name: Yup.string().required(`${translate('Validation.name')}`),
+    englishName: Yup.string().required(`${translate('Validation.EnglishName')}`),
+    dariName: Yup.string().required(`${translate('Validation.DariName')}`),
+    pashtoName: Yup.string().required(`${translate('Validation.PashtoName')}`),
   });
 
   const defaultValues = useMemo<IUnitOfMeasure>(
     () => ({
       id: selecteduniteOfMeasure?.id,
-      name: selecteduniteOfMeasure?.name || '',
-      description: selecteduniteOfMeasure?.description || '',
+      englishName: selecteduniteOfMeasure?.englishName || '',
+      dariName: selecteduniteOfMeasure?.dariName || '',
+      pashtoName: selecteduniteOfMeasure?.pashtoName || '',
     }),
     [selecteduniteOfMeasure]
   );
@@ -100,18 +103,21 @@ export default observer(function MeasurementNewEditForm() {
               }}
             >
               <RHFTextField
-                name="name"
-                label={translate('GeneralFields.Name')}
+                name="englishName"
+                label={translate('GeneralFields.EnglishName')}
                 showAsterisk={true}
                 autoFocus
-              />          
+              />
               <RHFTextField
-                name="description"
-                label={translate('Branch.description')}
+                name="pashtoName"
+                label={translate('GeneralFields.PashtoName')}
                 showAsterisk={true}
-                multiline
-                minRows={4}
-                maxRows={8}
+                autoFocus
+              />
+              <RHFTextField
+                name="dariName"
+                label={translate('GeneralFields.DariName')}
+                showAsterisk={true}
                 autoFocus
               />
             </Box>

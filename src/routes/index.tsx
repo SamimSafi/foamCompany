@@ -37,6 +37,8 @@ import ExpenseTypeList from 'src/sections/@dashboard/ExpenseType/ExpenseTypeList
 import ExpenseTypeCreate from 'src/sections/@dashboard/ExpenseType/ExpenseTypeForm/ExpenseTypeCreate';
 import ExpenseList from 'src/sections/@dashboard/Expense/ExpenseList/ExpenseList';
 import ExpenseCreate from 'src/sections/@dashboard/Expense/ExpenseForm/ExpenseCreate';
+import GoodsList from 'src/sections/@dashboard/Goods/GoodsList/GoodsList';
+import GoodsCreate from 'src/sections/@dashboard/Goods/GoodsForm/GoodsCreate';
 
 // ----------------------------------------------------------------------
 
@@ -432,6 +434,37 @@ export default function Router() {
               element: (
                 <PermissionBasedGuard hasContent permissions={['PositionTitle-Update']}>
                   <PositionTitleCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+          ],
+        },
+        // Goods Routs
+        {
+          path: 'Goods',
+          children: [
+            { element: <Navigate to="/dashboard/Goods/list" replace />, index: true },
+            {
+              path: 'list',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Goods-GetAll']}>
+                  <GoodsList />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'new',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Goods-Create']}>
+                  <GoodsCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'edit',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Goods-Update']}>
+                  <GoodsCreate />
                 </PermissionBasedGuard>
               ),
             },

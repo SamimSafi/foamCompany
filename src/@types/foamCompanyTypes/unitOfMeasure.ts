@@ -1,7 +1,9 @@
 export interface IUnitOfMeasure {
   id?: number;
   name?: string;
-  description?: string;
+  englishName?: string;
+  dariName?: string;
+  pashtoName?: string;
   afterSubmit?: string;
 }
 

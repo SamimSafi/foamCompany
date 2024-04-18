@@ -25,27 +25,28 @@ import { useSnackbar } from 'notistack';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../stores/store';
 import MyDialog from 'src/components/MyDialog';
-import ContractTypeTableToolbar from './ContractTypeTableToolbar';
-import ContractTypeTableRow from './ContractTypeTableRow';
-import { IContractType } from 'src/@types/foamCompanyTypes/ContractType';
-import ContractTypeDelete from './ContractTypeDelete';
+import { IUnitOfMeasure } from 'src/@types/foamCompanyTypes/unitOfMeasure';
+import MeasurementTableToolbar from './GoodsTableToolbar';
+import { ContractTypeTableRow } from '../../ContractType/ContractTypeList';
+import MeasurementDelete from './GoodsDelete';
+import { IGoods } from 'src/@types/foamCompanyTypes/Goods';
+import GoodsTableRow from './GoodsTableRow';
 
 // ----------------------------------------------------------------------
 
-export default observer(function ContractTypeList() {
-  const { ContractTypeStore } = useStore();
+export default observer(function GoodsList() {
+  const { GoodsStore } = useStore();
   const { translate } = useLocales();
   const {
-    loadContractType,
-    ContractTypeList,
-    ContractTypeRegistry,
+    loadGoods,
+    GoodsList,
+    GoodsRegistry,
     totalRecord,
-    ContractTypeSearch,
-    deleteContractType,
-    getContractTypeFromRegistry,
+    Goodsearch,
+    getGoodsFromRegistry,
     setOpenCloseDialog,
     openDialog,
-  } = ContractTypeStore;
+  } = GoodsStore;
   const {
     dense,
     page,
@@ -69,22 +70,22 @@ export default observer(function ContractTypeList() {
   const [ContractTypeId, setContractTypeId] = useState<number>(0);
   const TABLE_HEAD = [
     { id: 'ID', label: `${translate('GeneralFields.Id')}`, align: 'left' },
-    { id: 'name', label: `${translate('GeneralFields.Name')}`, align: 'left' },
-    { id: 'code', label: `${translate('GeneralFields.Code')}`, align: 'left' },
+    { id: 'Name', label: `${translate('GeneralFields.Name')}`, align: 'left' },
+    // { id: 'description', label: `${translate('GeneralFields.description')}`, align: 'left' },
     { id: '', label: `${translate('GeneralFields.Action')}` },
   ];
   const handleFilterName = (filterName: string) => {
     setFilterName(filterName);
     setPage(0);
     if (filterName.length > 1) {
-      ContractTypeSearch({
+      Goodsearch({
         pageIndex: 0,
         pageSize: rowsPerPage,
-        name: filterName,
+        searchBy: filterName,
         //dariName: filterName,
       });
     } else if (filterName === '') {
-      ContractTypeSearch({ pageIndex: 0, pageSize: rowsPerPage });
+      Goodsearch({ pageIndex: 0, pageSize: rowsPerPage });
     }
   };
 
@@ -97,7 +98,7 @@ export default observer(function ContractTypeList() {
     setOpenCloseDialog();
   };
   const handleEditRow = (id: number) => {
-    getContractTypeFromRegistry(id);
+    getGoodsFromRegistry(id);
     navigate(PATH_DASHBOARD.ContractType.edit);
   };
 
@@ -120,21 +121,21 @@ export default observer(function ContractTypeList() {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-    loadContractType({ pageIndex: newPage, pageSize: rowsPerPage });
+    loadGoods({ pageIndex: newPage, pageSize: rowsPerPage });
   };
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeRowsPerPage(event);
     let pageZize = parseInt(event.target.value);
-    loadContractType({ pageIndex: 0, pageSize: pageZize });
+    loadGoods({ pageIndex: 0, pageSize: pageZize });
   };
   useEffect(() => {
-    if (ContractTypeRegistry.size <= 1) {
-      loadContractType({ pageIndex: 0, pageSize: rowsPerPage });
+    if (GoodsRegistry.size <= 1) {
+      loadGoods({ pageIndex: 0, pageSize: rowsPerPage });
     }
   }, []);
 
   const dataFiltered = applySortFilter({
-    tableData: ContractTypeList,
+    tableData: GoodsList,
     comparator: getComparator(order, orderBy),
     filterName: '',
   });
@@ -144,21 +145,21 @@ export default observer(function ContractTypeList() {
   const isNotFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Page title={translate('ContractType.Title')}>
+    <Page title={translate('Expense.Title')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={translate('ContractType.ContractTypeList')}
+          heading={translate('Expense.GoodsList')}
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
 
-            { name: `${translate('ContractType.ContractTypeList')}` },
+            { name: `${translate('Expense.GoodsList')}` },
           ]}
           action={
             <Button
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
               component={RouterLink}
-              to={PATH_DASHBOARD.ContractType.new}
+              to={PATH_DASHBOARD.Goods.new}
             >
               {translate('CRUD.Create')}
             </Button>
@@ -166,7 +167,7 @@ export default observer(function ContractTypeList() {
         />
 
         <Card>
-          <ContractTypeTableToolbar filterName={filterName} onFilterName={handleFilterName} />
+          <MeasurementTableToolbar filterName={filterName} onFilterName={handleFilterName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 960, position: 'relative' }}>
@@ -183,7 +184,7 @@ export default observer(function ContractTypeList() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <ContractTypeTableRow
+                      <GoodsTableRow
                         key={row.id}
                         row={row}
                         index={index}
@@ -223,7 +224,7 @@ export default observer(function ContractTypeList() {
               title={translate('CRUD.DeleteTitle')}
               size="md"
             >
-              <ContractTypeDelete id={ContractTypeId} />
+              <MeasurementDelete id={ContractTypeId} />
             </MyDialog>
             <FormControlLabel
               control={<Switch checked={dense} onChange={onChangeDense} />}
@@ -244,7 +245,7 @@ function applySortFilter({
   comparator,
   filterName,
 }: {
-  tableData: IContractType[];
+  tableData: IGoods[];
   comparator: (a: any, b: any) => number;
   filterName: string;
 }) {
@@ -261,7 +262,7 @@ function applySortFilter({
   if (filterName) {
     tableData = tableData.filter(
       (item: Record<string, any>) =>
-        item.searchBy.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        item.search.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 

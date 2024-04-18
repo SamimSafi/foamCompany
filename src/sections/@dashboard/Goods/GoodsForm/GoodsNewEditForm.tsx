@@ -1,91 +1,84 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate, useLocation } from 'react-router-dom';
 // form
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, FormControlLabel, Grid, Stack, Switch } from '@mui/material';
+import { Box, Button, Card, Grid, Stack } from '@mui/material';
 
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-// @types
+
 import useLocales from 'src/hooks/useLocales';
 // components
 import Iconify from '../../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../stores/store';
-import { IPositionTitle } from 'src/@types/foamCompanyTypes/PositionTitle';
-import CustomRHFAutocomplete from 'src/components/hook-form/CustomRHFAutocomplete';
-import uuid from 'react-uuid';
+import React from 'react';
+import { IGoods } from '../../../../@types/foamCompanyTypes/Goods';
+import LocalizDatePicker from 'src/sections/common/LocalizDatePicker';
 // ----------------------------------------------------------------------
 
-export default observer(function PositionTitleNewEditForm() {
-  const [departmentName, setDepartmentName] = useState<string | undefined>('');
-
-  const { PositionTitleStore, commonDropdown } = useStore();
+export default observer(function GoodsNewEditForm() {
+  const { GoodsStore, commonDropdown } = useStore();
   const { translate } = useLocales();
-  const {
-    createPositionTitle,
-    updatePositionTitle,
-    editMode,
-    selectedPositionTitle,
-    clearSelectedPositionTitle,
-  } = PositionTitleStore;
+  const { createGoods, updateGoods, editMode, selectedGoods, clearSelectedGoods } = GoodsStore;
   const navigate = useNavigate();
-
+  const { loadContractTypeDDL, ContractTypeOption } = commonDropdown;
   const { enqueueSnackbar } = useSnackbar();
 
-  const { loadJobPositionDDL, JobPositionOption } = commonDropdown;
-
-  const NewPositionTitleSchema = Yup.object().shape({
+  const NewContractTypeSchema = Yup.object().shape({
     englishName: Yup.string().required(`${translate('Validation.EnglishName')}`),
+    dariName: Yup.string().required(`${translate('Validation.PashtoName')}`),
+    pashtoName: Yup.string().required(`${translate('Validation.DariName')}`),
   });
 
-  const defaultValues = useMemo<IPositionTitle>(
+  const defaultValues = useMemo<IGoods>(
     () => ({
-      id: selectedPositionTitle?.id,
-      englishName: selectedPositionTitle?.englishName || '',
-      dariName: selectedPositionTitle?.dariName || '',
-      pashtoName: selectedPositionTitle?.pashtoName || '',
-      code: selectedPositionTitle?.code || '',
-      isActive: selectedPositionTitle?.isActive || undefined,
+      id: selectedGoods?.id,
+      englishName: selectedGoods?.englishName || '',
+      dariName: selectedGoods?.dariName || '',
+      pashtoName: selectedGoods?.pashtoName || '',
+      unitofmeasureId: selectedGoods?.unitofmeasureId || undefined,
+      price: selectedGoods?.price || undefined,
+      categoryTypeId: selectedGoods?.categoryTypeId || undefined,
+      isPurchase: selectedGoods?.isPurchase || false,
+      expireDate: selectedGoods?.expireDate || new Date(),
+      description: selectedGoods?.description || '',
     }),
-    [selectedPositionTitle]
+    [selectedGoods]
   );
 
-  const methods = useForm<IPositionTitle>({
-    resolver: yupResolver(NewPositionTitleSchema),
+  const methods = useForm<IGoods>({
+    resolver: yupResolver(NewContractTypeSchema),
     defaultValues,
   });
 
   const {
     reset,
     handleSubmit,
-    watch,
-    setValue,
     control,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = (data: IPositionTitle) => {
+  const onSubmit = (data: IGoods) => {
     if (data.id! === undefined) {
       ///create
-      createPositionTitle(data).then(() => {
+      createGoods(data).then(() => {
         reset();
         enqueueSnackbar(`${translate('Tostar.CreateSuccess')}`);
-        navigate(PATH_DASHBOARD.PositionTitle.list);
+        navigate(PATH_DASHBOARD.ContractType.list);
       });
     } else {
       ///update
-      updatePositionTitle(data).then(() => {
-        clearSelectedPositionTitle();
+      updateGoods(data).then(() => {
         reset();
         enqueueSnackbar(`${translate('Tostar.UpdateSuccess')}`);
-        navigate(PATH_DASHBOARD.PositionTitle.list);
+        navigate(PATH_DASHBOARD.ContractType.list);
       });
     }
   };
@@ -98,6 +91,10 @@ export default observer(function PositionTitleNewEditForm() {
       reset(defaultValues);
     }
   }, [reset, editMode, defaultValues]);
+
+  useEffect(() => {
+    loadContractTypeDDL();
+  }, [loadContractTypeDDL]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -119,36 +116,57 @@ export default observer(function PositionTitleNewEditForm() {
                 autoFocus
               />
               <RHFTextField
-                name="dariName"
-                label={translate('GeneralFields.DariName')}
-                showAsterisk={true}
-                autoFocus
-              />
-              <RHFTextField
                 name="pashtoName"
                 label={translate('GeneralFields.PashtoName')}
                 showAsterisk={true}
                 autoFocus
               />
               <RHFTextField
-                name="code"
-                label={translate('GeneralFields.Code')}
+                name="dariName"
+                label={translate('Branch.DariName')}
                 showAsterisk={true}
                 autoFocus
               />
-              {/* 
-              <RHFSelect
-                name="branchId"
-                label={translate('JobPosition.Branch')}
-                showAsterisk={true}
-              >
+              <RHFSelect name="unitofmeasureId" label={translate('Goods.Unit')} showAsterisk={true}>
                 <option value="" />
-                {JobPositionOption.map((op) => (
+                {ContractTypeOption.map((op) => (
                   <option key={op.value} value={op.value}>
                     {op.text}
                   </option>
                 ))}
-              </RHFSelect> */}
+              </RHFSelect>
+
+              <RHFTextField
+                name="price"
+                label={translate('Goods.Price')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <LocalizDatePicker
+                name="expireDate"
+                label={translate('GeneralFields.StartDate')}
+                showAsterisk={true}
+                control={control}
+              />
+
+              <RHFSelect
+                name="categoryTypeId"
+                label={translate('Goods.category')}
+                showAsterisk={true}
+              >
+                <option value="" />
+                {ContractTypeOption.map((op) => (
+                  <option key={op.value} value={op.value}>
+                    {op.text}
+                  </option>
+                ))}
+              </RHFSelect>
+              <RHFTextField
+                name="description"
+                label={translate('GeneralFields.Description')}
+                showAsterisk={true}
+                autoFocus
+              />
             </Box>
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
@@ -169,8 +187,8 @@ export default observer(function PositionTitleNewEditForm() {
                 color="error"
                 startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
                 onClick={() => {
-                  clearSelectedPositionTitle();
-                  navigate(PATH_DASHBOARD.PositionTitle.list);
+                  clearSelectedGoods();
+                  navigate(PATH_DASHBOARD.Goods.list);
                 }}
               >
                 {translate('CRUD.BackToList')}

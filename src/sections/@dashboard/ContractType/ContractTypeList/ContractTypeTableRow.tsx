@@ -40,9 +40,6 @@ export default function ContractTypeTableRow({ row, onEditRow, onDeleteRow, inde
     <TableRow hover>
       <TableCell align="left">{index + 1}</TableCell>
       <TableCell align="left">{name}</TableCell>
-      <TableCell align="left">{englishName}</TableCell>
-      <TableCell align="left">{pashtoName}</TableCell>
-      <TableCell align="left">{dariName}</TableCell>
 
       <TableCell align="left">
         <TableMoreMenu

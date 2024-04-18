@@ -12,10 +12,11 @@ import useLocales from 'src/hooks/useLocales';
 import { IContractType } from 'src/@types/foamCompanyTypes/ContractType';
 import { IBranch } from 'src/@types/foamCompanyTypes/branch';
 import { IUnitOfMeasure } from 'src/@types/foamCompanyTypes/unitOfMeasure';
+import { IGoods } from 'src/@types/foamCompanyTypes/Goods';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IUnitOfMeasure;
+  row: IGoods;
   // selected: boolean;
   onEditRow: VoidFunction;
   //onSelectRow: VoidFunction;
@@ -23,7 +24,7 @@ type Props = {
   index: any;
 };
 
-export default function MeasurementTableRow({ row, onEditRow, onDeleteRow, index }: Props) {
+export default function GoodsTableRow({ row, onEditRow, onDeleteRow, index }: Props) {
   const theme = useTheme();
 
   const { id, name } = row;

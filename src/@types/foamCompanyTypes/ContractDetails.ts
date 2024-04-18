@@ -1,6 +1,6 @@
 export interface IContractDetails {
   id?: number;
-  employeeId?: number;
+  employeeProfileId?: number;
   contractTypeId?: number;
   positionTitleId?: number;
   branchId?: number;
@@ -12,7 +12,7 @@ export interface IContractDetails {
   branch?: string;
   contractType?: string;
   employeeName?: string;
-  afterSubmit?:string;
+  afterSubmit?: string;
   positionTitleName?: string;
 }
 

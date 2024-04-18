@@ -1,7 +1,10 @@
 export interface IGoods {
   id?: number;
   name?: string;
-  unitOfMeasureId?: number;
+  englishName?: string;
+  dariName?: string;
+  pashtoName?: string;
+  unitofmeasureId?: number;
   price?: number;
   branchId?: number;
   expireDate?: Date;
@@ -17,8 +20,8 @@ export interface IEmployeeForEdit {
   fatherName?: string;
   provinceId?: number;
   districtId?: number;
-  provinceName?: string,
-  districtName?: string,
+  provinceName?: string;
+  districtName?: string;
   tazkiraNo?: string;
   tazkiraTypeId?: number;
   joldNo?: string;
@@ -90,7 +93,6 @@ export interface IEmployeeDetails {
   isCurrent: boolean;
 }
 
-
 // ================== Employee Report ==========================
 export interface EmployeeAccountReport {
   departmentId?: number;
@@ -99,30 +101,30 @@ export interface EmployeeAccountReport {
   hasAccount?: boolean;
   needReport?: boolean;
   generateReportType?: string;
-
 }
 
-export interface EmployeeAccountReportResult{
+export interface EmployeeAccountReportResult {
   id: number;
-    firstName:string;
-    surName: string;
-    fullName: string;
-    fatherName: string;
-    grandFatherName: string;
-    genderName: string;
-    tazkiraNo: string;
-    dateOfBirth: string;
-    temporaryAddress: string;
-    permenantAddress: string;
-    departmentName: string;
-    provinceName: string;
-    employeeHealthState:string;
-    attendanceId: number;
-    bloodGroup: string;
-    personalEmail: string;
-    officialEmail: string;
-    phoneNumber: string;
-    photoPath: string;
-    hasAccount: boolean;
-    rfidNumber: number;
-    isCurrent: boolean;}
+  firstName: string;
+  surName: string;
+  fullName: string;
+  fatherName: string;
+  grandFatherName: string;
+  genderName: string;
+  tazkiraNo: string;
+  dateOfBirth: string;
+  temporaryAddress: string;
+  permenantAddress: string;
+  departmentName: string;
+  provinceName: string;
+  employeeHealthState: string;
+  attendanceId: number;
+  bloodGroup: string;
+  personalEmail: string;
+  officialEmail: string;
+  phoneNumber: string;
+  photoPath: string;
+  hasAccount: boolean;
+  rfidNumber: number;
+  isCurrent: boolean;
+}

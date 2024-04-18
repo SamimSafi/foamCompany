@@ -56,6 +56,7 @@ import { IExpenseType, IExpenseTypeParams } from 'src/@types/foamCompanyTypes/ex
 import { ICustomer, ICustomerParams } from 'src/@types/foamCompanyTypes/customer';
 import { ISupplier, ISupplierParams } from 'src/@types/foamCompanyTypes/Supplier';
 import { IExpense, IExpenseParams } from 'src/@types/foamCompanyTypes/Expense';
+import { IGoods, IGoodsParams } from 'src/@types/foamCompanyTypes/Goods';
 
 //axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = 'http://localhost:7073/api/';
@@ -541,15 +542,15 @@ const Customer = {
 };
 // Unite Of measure
 const UniteOfMeasure = {
-  create: (unit: IUnitOfMeasure) => requests.post<void>('/UniteOfMeasurement', unit),
+  create: (unit: IUnitOfMeasure) => requests.post<void>('/Unitofmeasures', unit),
   getList: (param: IUnitOfMeasureParams) =>
-    axios.post<any>(`/UniteOfMeasurement/GetList`, param, { withCredentials: true }),
+    axios.post<any>(`/Unitofmeasures/GetList`, param, { withCredentials: true }),
   update: (PositionTitle: IUnitOfMeasure) =>
-    requests.put<void>(`/UniteOfMeasurement/${PositionTitle.id}`, PositionTitle),
+    requests.put<void>(`/Unitofmeasures/${PositionTitle.id}`, PositionTitle),
   delete: (id: number, remark: string) =>
-    axios.delete<void>(`/UniteOfMeasurement/${id}`, { data: remark }),
+    axios.delete<void>(`/Unitofmeasures/${id}`, { data: remark }),
   DDl: (departmentId: any) =>
-    axios.get<any>(`/UniteOfMeasurement/GetDropDownList/${departmentId}`, {
+    axios.get<any>(`/Unitofmeasures/GetDropDownList/${departmentId}`, {
       withCredentials: true,
     }),
 };
@@ -574,6 +575,15 @@ const ExpenseType = {
   delete: (id: number, remark: string) =>
     axios.delete<void>(`/ExpenseType/${id}`, { data: remark }),
   DDl: () => axios.get<any>(`/ExpenseType/GetDropDownList`, { withCredentials: true }),
+};
+//  Goods
+const Goods = {
+  create: (Goods: IGoods) => requests.post<void>('/Goodsss', Goods),
+  getList: (param: IGoodsParams) =>
+    axios.post<any>(`/Goodsss/GetList`, param, { withCredentials: true }),
+  update: (Goods: IGoods) => requests.put<void>(`/Goodsss/${Goods.id}`, Goods),
+  delete: (id: number, remark: string) => axios.delete<void>(`/Goodsss/${id}`, { data: remark }),
+  DDl: () => axios.get<any>(`/Goodsss/GetDropDownList`, { withCredentials: true }),
 };
 
 //  Expense
@@ -665,6 +675,7 @@ const agent = {
   Customer,
   Supplier,
   Expense,
+  Goods,
 };
 
 export default agent;

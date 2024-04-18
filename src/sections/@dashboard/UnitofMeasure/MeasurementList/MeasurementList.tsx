@@ -69,8 +69,7 @@ export default observer(function MeasurementList() {
   const [ContractTypeId, setContractTypeId] = useState<number>(0);
   const TABLE_HEAD = [
     { id: 'ID', label: `${translate('GeneralFields.Id')}`, align: 'left' },
-    { id: 'Name', label: `${translate('GeneralFields.Name')}`, align: 'left' },
-    { id: 'description', label: `${translate('GeneralFields.description')}`, align: 'left' },
+    { id: 'name', label: `${translate('GeneralFields.Name')}`, align: 'left' },
     { id: '', label: `${translate('GeneralFields.Action')}` },
   ];
   const handleFilterName = (filterName: string) => {

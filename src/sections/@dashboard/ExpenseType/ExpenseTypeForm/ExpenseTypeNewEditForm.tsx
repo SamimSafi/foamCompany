@@ -119,9 +119,6 @@ export default observer(function ExpenseTypeNewEditForm() {
                 name="dariName"
                 label={translate('Branch.DariName')}
                 showAsterisk={true}
-                multiline
-                minRows={4}
-                maxRows={8}
                 autoFocus
               />
             </Box>

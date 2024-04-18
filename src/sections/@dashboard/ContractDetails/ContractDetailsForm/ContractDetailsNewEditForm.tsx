@@ -194,11 +194,7 @@ export default observer(function ContractDetailsNewEditForm() {
 
   useEffect(() => {
     loadContractTypeDDL();
-
-   
-
   }, [loadContractTypeDDL, loadPositionTitleDDL, loadJobPositionDDL, val.contractTypeId]);
-
 
   useEffect(() => {
     setValue('positionTitleName', positionTitleName);
@@ -244,7 +240,6 @@ export default observer(function ContractDetailsNewEditForm() {
                 ))}
               </RHFSelect>
 
-
               <RHFSelect
                 name="positionTitleId"
                 label={`${translate('PositionTitle.PositionTitle')}` + ' ' + '*'}
@@ -257,8 +252,8 @@ export default observer(function ContractDetailsNewEditForm() {
                   </option>
                 ))}
               </RHFSelect>
-              
-              <RHFSelect
+
+              {/* <RHFSelect
                 name="branchId"
                 label={translate('JobPosition.Branch')}
                 showAsterisk={true}
@@ -269,9 +264,23 @@ export default observer(function ContractDetailsNewEditForm() {
                     {op.text}
                   </option>
                 ))}
-              </RHFSelect>
-              <RHFTextField name="salaryPerHour" label={translate('GeneralFields.Remarks')} />
-              
+              </RHFSelect> */}
+              {/* <RHFTextField name="salaryPerHour" label={translate('GeneralFields.Remarks')} /> */}
+
+              <LocalizDatePicker
+                name="startDate"
+                label={translate('GeneralFields.StartDate')}
+                showAsterisk={true}
+                control={control}
+              />
+
+              <LocalizDatePicker
+                name="endDate"
+                label={translate('GeneralFields.EndDate')}
+                showAsterisk={true}
+                control={control}
+              />
+              <RHFTextField name="remarks" label={translate('GeneralFields.Remarks')} />
               <Controller
                 name="isCurrent"
                 control={control}
@@ -292,25 +301,6 @@ export default observer(function ContractDetailsNewEditForm() {
                   />
                 )}
               />
-
-              <LocalizDatePicker
-                name="startDate"
-                label={translate('GeneralFields.StartDate')}
-                showAsterisk={true}
-                control={control}
-              />
-
-              {contractType !== 19 || val.isCurrent !== true || editMode == true ? (
-                <LocalizDatePicker
-                  name="endDate"
-                  label={translate('GeneralFields.EndDate')}
-                  showAsterisk={true}
-                  control={control}
-                />
-              ) : (
-                ''
-              )}
-
             </Box>
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
