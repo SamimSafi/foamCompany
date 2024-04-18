@@ -45,12 +45,12 @@ import EmployeeTableToolbar from './SupplierTableToolbar';
 import PermissionBasedGuard from 'src/guards/PermissionBasedGuard';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import EmployeeDetails from '../../employeeAttendance/EmployeeDetails';
+import SupplierTableRow from './SupplierTableRow';
 
 // ----------------------------------------------------------------------
 
 export default observer(function SupplierList() {
-  const { EmployeeStore, ContractDetailsStore } =
-    useStore();
+  const { EmployeeStore, ContractDetailsStore } = useStore();
   const { translate } = useLocales();
   const {
     loadEmployee,
@@ -67,7 +67,8 @@ export default observer(function SupplierList() {
     loadEmployeeDetail,
     selectedEmployee,
   } = EmployeeStore;
-  const { loadContractDetails, getEmpCurrentContract,ContractDetailsRegistry } = ContractDetailsStore;
+  const { loadContractDetails, getEmpCurrentContract, ContractDetailsRegistry } =
+    ContractDetailsStore;
 
   const {
     dense,
@@ -93,7 +94,7 @@ export default observer(function SupplierList() {
   const TABLE_HEAD = [
     { id: 'ID', label: `${translate('Employee.Id')}`, align: 'left' },
     { id: 'fullName', label: `${translate('Employee.Name')}`, align: 'left' },
-    { id: 'departmentName', label: `${translate('Employee.Department')}`, align: 'left' },
+    { id: 'sureName', label: `${translate('Employee.sureName')}`, align: 'left' },
     { id: 'personalEmail', label: `${translate('Employee.Email')}`, align: 'left' },
     { id: 'phoneNumber', label: `${translate('Employee.PhoneNumber')}`, align: 'left' },
 
@@ -210,20 +211,20 @@ export default observer(function SupplierList() {
     <Page title={translate('Employee.Title')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={translate('Employee.EmployeeList')}
+          heading={translate('Employee.SupplierList')}
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
 
-            { name: `${translate('Employee.EmployeeList')}` },
+            { name: `${translate('Employee.SupplierList')}` },
           ]}
           action={
             <>
-              <PermissionBasedGuard permissions={['Employee-Create']}>
+              <PermissionBasedGuard permissions={['Supplier-Create']}>
                 <Button
                   variant="contained"
                   startIcon={<Iconify icon="eva:plus-fill" />}
                   component={RouterLink}
-                  to={PATH_DASHBOARD.Employee.new}
+                  to={PATH_DASHBOARD.Supplier.new}
                 >
                   {translate('CRUD.Create')}
                 </Button>
@@ -250,7 +251,7 @@ export default observer(function SupplierList() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <EmployeeTableRow
+                      <SupplierTableRow
                         key={row.id}
                         index={index}
                         row={row}

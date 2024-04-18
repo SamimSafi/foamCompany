@@ -59,6 +59,8 @@ export default class commonDroptdown {
 
   MainRegionOption: SelectControl[] = []; // For Child Department DropDown
 
+  ExpenseTypeOption: SelectControl[] = []; // For Child Department DropDown
+
   SubRegionOption: SelectControl[] = []; // For Child Department DropDown
 
   ProvinceOption: SelectControl[] = []; // For Child Province DropDown
@@ -218,7 +220,7 @@ export default class commonDroptdown {
     });
     this.EmployeeDegreeOption = op;
   };
-  
+
   loadRoleDropdown = async () => {
     //console.log(agent.Permissions.getList({pageIndex:0,pageSize:10}));
     try {
@@ -239,7 +241,6 @@ export default class commonDroptdown {
     });
     this.RolesOption = op;
   };
-
 
   loadLanguageDropdown = async () => {
     //console.log(agent.Permissions.getList({pageIndex:0,pageSize:10}));
@@ -262,7 +263,6 @@ export default class commonDroptdown {
     this.LanguageOption = op;
   };
 
-
   setDocumentSecurityLevelDropdown = (data: DocumentLevelDropdown[]) => {
     const op = data.map((op) => {
       const optRow = {
@@ -273,8 +273,6 @@ export default class commonDroptdown {
     });
     this.DocumentSecurityLevelOption = op;
   };
-
-
 
   setOrganizationDropdown = (data: OrganizationWithLocalizationDropDown[]) => {
     const op = data.map((op) => {
@@ -418,7 +416,6 @@ export default class commonDroptdown {
     this.PermissionOption = op;
   };
 
-
   loadEmployeePositionDropdown = async () => {
     // try {
     //  // const result = await agent.EmployeesPosition.EmpPositionDDL();
@@ -480,8 +477,6 @@ export default class commonDroptdown {
       value: op.id,
     }));
   };
-
-
 
   // Province Dropdown
   loadProvinceDropdown = async () => {
@@ -545,7 +540,6 @@ export default class commonDroptdown {
     });
     this.DistrictOption = op;
   };
-
 
   // loadContractTypeDDL
   loadContractTypeDDL = async () => {
@@ -635,6 +629,27 @@ export default class commonDroptdown {
     this.CountryOption = op;
   };
 
+  // ExpenseType Dropdown
+  loadExpenseTypeDropdown = async () => {
+    try {
+      const result = await agent.ExpenseType.DDl();
+      this.setExpenseTypeDDL(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  setExpenseTypeDDL = (data: IDDL[]) => {
+    const op = data.map((op) => {
+      const optRow = {
+        text: op.name,
+        value: op.id,
+      };
+      return optRow;
+    });
+    this.ExpenseTypeOption = op;
+  };
+
   // Get Active Employee
   loadGetActiveEmployeeDropdown = async (id: number) => {
     try {
@@ -697,5 +712,4 @@ export default class commonDroptdown {
     });
     this.GetHighLevelEmployee = op;
   };
-
 }

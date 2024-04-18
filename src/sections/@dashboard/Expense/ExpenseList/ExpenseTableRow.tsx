@@ -10,10 +10,13 @@ import { TableMoreMenu } from '../../../../components/table';
 import useLocales from 'src/hooks/useLocales';
 
 import { IContractType } from 'src/@types/foamCompanyTypes/ContractType';
+import { IBranch } from 'src/@types/foamCompanyTypes/branch';
+import { IUnitOfMeasure } from 'src/@types/foamCompanyTypes/unitOfMeasure';
+import { IExpense } from 'src/@types/foamCompanyTypes/Expense';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IContractType;
+  row: IExpense;
   // selected: boolean;
   onEditRow: VoidFunction;
   //onSelectRow: VoidFunction;
@@ -21,10 +24,10 @@ type Props = {
   index: any;
 };
 
-export default function ContractTypeTableRow({ row, onEditRow, onDeleteRow, index }: Props) {
+export default function ExpenseTableRow({ row, onEditRow, onDeleteRow, index }: Props) {
   const theme = useTheme();
 
-  const { id, name, englishName, pashtoName, dariName } = row;
+  const { id, expenseType, amount, description } = row;
   const { translate } = useLocales();
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -39,10 +42,9 @@ export default function ContractTypeTableRow({ row, onEditRow, onDeleteRow, inde
   return (
     <TableRow hover>
       <TableCell align="left">{index + 1}</TableCell>
-      <TableCell align="left">{name}</TableCell>
-      <TableCell align="left">{englishName}</TableCell>
-      <TableCell align="left">{pashtoName}</TableCell>
-      <TableCell align="left">{dariName}</TableCell>
+      <TableCell align="left">{expenseType}</TableCell>
+      <TableCell align="left">{amount}</TableCell>
+      <TableCell align="left">{description}</TableCell>
 
       <TableCell align="left">
         <TableMoreMenu

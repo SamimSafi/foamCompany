@@ -5,7 +5,7 @@ function path(root: string, sublink: string) {
 }
 
 const ROOTS_AUTH = '/auth';
-const ROOT_PMISDASHBOARD= '/pmisdashboard';
+const ROOT_PMISDASHBOARD = '/pmisdashboard';
 const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
@@ -34,7 +34,6 @@ export const PATH_PAGE = {
   page500: '/500',
   components: '/components',
 };
-
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
@@ -85,8 +84,8 @@ export const PATH_DASHBOARD = {
     accountReport: path(ROOTS_DASHBOARD, '/Employee/accountReport'),
   },
 
-  // Employee Position
-  EmployeePositions: {
+  // Position title
+  EmployeePosition: {
     root: path(ROOTS_DASHBOARD, '/EmployeePosition'),
     list: path(ROOTS_DASHBOARD, '/EmployeePosition/list'),
     new: path(ROOTS_DASHBOARD, '/EmployeePosition/new'),
@@ -121,6 +120,38 @@ export const PATH_DASHBOARD = {
     detail: path(ROOTS_DASHBOARD, '/JobPosition/detail'),
   },
 
+  // Customer
+  Customer: {
+    root: path(ROOTS_DASHBOARD, '/Customer'),
+    list: path(ROOTS_DASHBOARD, '/Customer/list'),
+    new: path(ROOTS_DASHBOARD, '/Customer/new'),
+    edit: path(ROOTS_DASHBOARD, '/Customer/edit'),
+    detail: path(ROOTS_DASHBOARD, '/Customer/detail'),
+  },
+  // Supplier
+  Supplier: {
+    root: path(ROOTS_DASHBOARD, '/Supplier'),
+    list: path(ROOTS_DASHBOARD, '/Supplier/list'),
+    new: path(ROOTS_DASHBOARD, '/Supplier/new'),
+    edit: path(ROOTS_DASHBOARD, '/Supplier/edit'),
+    detail: path(ROOTS_DASHBOARD, '/Supplier/detail'),
+  },
+  // ExpenseType
+  ExpenseType: {
+    root: path(ROOTS_DASHBOARD, '/ExpenseType'),
+    list: path(ROOTS_DASHBOARD, '/ExpenseType/list'),
+    new: path(ROOTS_DASHBOARD, '/ExpenseType/new'),
+    edit: path(ROOTS_DASHBOARD, '/ExpenseType/edit'),
+    detail: path(ROOTS_DASHBOARD, '/ExpenseType/detail'),
+  },
+  // Expense
+  Expense: {
+    root: path(ROOTS_DASHBOARD, '/Expense'),
+    list: path(ROOTS_DASHBOARD, '/Expense/list'),
+    new: path(ROOTS_DASHBOARD, '/Expense/new'),
+    edit: path(ROOTS_DASHBOARD, '/Expense/edit'),
+    detail: path(ROOTS_DASHBOARD, '/Expense/detail'),
+  },
 
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),
@@ -143,7 +174,7 @@ export const PATH_DASHBOARD = {
     detail: path(ROOTS_DASHBOARD, '/role/role/detail'),
     demoEdit: path(ROOTS_DASHBOARD, '/role/product/nike-blazer-low-77-vintage/edit'),
   },
- 
+
   // Permission
   Permission: {
     root: path(ROOTS_DASHBOARD, '/Permission'),
@@ -176,7 +207,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/employeeAttendance'),
     list: path(ROOTS_DASHBOARD, '/employeeAttendance/list'),
   },
- 
+
   // Province
   Province: {
     root: path(ROOTS_DASHBOARD, '/Province'),
@@ -219,5 +250,4 @@ export const PATH_DASHBOARD = {
     view: (title: string) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
     demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
   },
-
 };

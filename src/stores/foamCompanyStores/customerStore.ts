@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { SelectControl } from 'src/@types/common';
 import agentCustomer from '../../api/agent';
-import { ICustomer,ICustomerParams } from 'src/@types/foamCompanyTypes/customer';
+import { ICustomer, ICustomerParams } from 'src/@types/foamCompanyTypes/customer';
 
 export default class customerStore {
   openDialog = false;
@@ -45,7 +45,6 @@ export default class customerStore {
     }
   };
 
-
   // Search
   Customerearch = async (params: ICustomerParams) => {
     this.CustomerRegistry.clear();
@@ -84,19 +83,19 @@ export default class customerStore {
   setDetailCloseDialog = () => (this.openDetailDialog = !this.openDetailDialog);
 
   createCustomer = async (Customer: ICustomer) => {
-      await agentCustomer.Customer.create(Customer);
-      runInAction(() => {
-        this.loadCustomer({ pageIndex: 0, pageSize: 5 });
-      });
+    await agentCustomer.Customer.create(Customer, Customer.profilePhoto);
+    runInAction(() => {
+      this.loadCustomer({ pageIndex: 0, pageSize: 5 });
+    });
   };
 
   updateCustomer = async (Customer: ICustomer) => {
-      await agentCustomer.Customer.update(Customer);
-      runInAction(() => {
-        this.loadCustomer({ pageIndex: 0, pageSize: 5 });
-        this.CustomerRegistry.delete(Customer.id!);
-        this.CustomerRegistry.set(Customer.id!, Customer);
-      });
+    await agentCustomer.Customer.update(Customer, Customer.profilePhoto);
+    runInAction(() => {
+      this.loadCustomer({ pageIndex: 0, pageSize: 5 });
+      this.CustomerRegistry.delete(Customer.id!);
+      this.CustomerRegistry.set(Customer.id!, Customer);
+    });
   };
 
   // loadCustomerTypeDropdown = async () => {

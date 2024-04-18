@@ -12,11 +12,16 @@ import { _userList } from '../../../../_mock';
 // components
 import Page from '../../../../components/Page';
 import HeaderBreadcrumbs from '../../../../components/HeaderBreadcrumbs';
+import ExpenseTypeNewEditForm from './ExpenseNewEditForm';
+import React from 'react';
+import ExpenseNewEditForm from './ExpenseNewEditForm';
 // sections
-import EmployeePositionNewEditForm from './EmployeePositionNewEditForm';
+
+// @type
+
 // ----------------------------------------------------------------------
 
-export default function EmployeePositionCreate() {
+export default function ExpenseCreate() {
   const { themeStretch } = useSettings();
 
   const { pathname } = useLocation();
@@ -26,17 +31,28 @@ export default function EmployeePositionCreate() {
   const isEdit = pathname.includes('edit');
 
   return (
-    <Page title={translate('EmployeePosition.CreateTitle')}>
+    <Page
+      title={!isEdit ? `${translate('Expense.AddTitle')}` : `${translate('Expense.UpdateTitle')}`}
+    >
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? `${translate('EmployeePosition.CreateEmployeePosition')}` : `${translate('EmployeePosition.EditEmployeePosition')}`}
+          heading={
+            !isEdit
+              ? `${translate('Expense.CreateExpense')}`
+              : `${translate('Expense.EditExpense')}`
+          }
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
-            { name: `${translate('EmployeePosition.EmployeePositionList')}`, href: PATH_DASHBOARD.EmployeePositions.list },
-            { name: !isEdit ? `${translate('EmployeePosition.NewEmployeePosition')}` : `${translate('EmployeePosition.UpdateEmployeePosition')}` },
+            {
+              name: `${translate('Expense.ExpenseList')}`,
+              href: PATH_DASHBOARD.ContractDetails.list,
+            },
+            {
+              name: !isEdit ? `${translate('Expense.New')}` : `${translate('Expense.Update')}`,
+            },
           ]}
         />
-        <EmployeePositionNewEditForm />
+        <ExpenseNewEditForm />
       </Container>
     </Page>
   );

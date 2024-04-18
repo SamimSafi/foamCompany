@@ -44,12 +44,15 @@ export default function EmployeeTableRow({
   const language = window.localStorage.getItem('i18nextLng');
   const {
     id,
-    fatherName,
+    surName,
     profilePhoto,
     phoneNumber,
     name,
     provinceName,
-    districtName,tazkiraNo,gender,age
+    districtName,
+    tazkiraNo,
+    gender,
+    age,
   } = row;
   const { translate } = useLocales();
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
@@ -78,7 +81,7 @@ export default function EmployeeTableRow({
         <TableCell align="left">{name}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {fatherName}
+          {surName}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>

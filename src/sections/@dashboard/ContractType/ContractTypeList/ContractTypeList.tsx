@@ -69,6 +69,7 @@ export default observer(function ContractTypeList() {
   const [ContractTypeId, setContractTypeId] = useState<number>(0);
   const TABLE_HEAD = [
     { id: 'ID', label: `${translate('GeneralFields.Id')}`, align: 'left' },
+    { id: 'name', label: `${translate('GeneralFields.Name')}`, align: 'left' },
     { id: 'englishName', label: `${translate('GeneralFields.EnglishName')}`, align: 'left' },
     { id: 'pashtoName', label: `${translate('GeneralFields.PashtoName')}`, align: 'left' },
     { id: 'dariName', label: `${translate('GeneralFields.DariName')}`, align: 'left' },

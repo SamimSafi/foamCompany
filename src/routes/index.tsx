@@ -29,6 +29,14 @@ import JobPositionCreate from 'src/sections/@dashboard/JobPosition/JobPositionFo
 import ContractDetailsCreate from 'src/sections/@dashboard/ContractDetails/ContractDetailsForm/ContractDetailsCreate';
 import ContractDetailsList from 'src/sections/@dashboard/ContractDetails/ContractDetailsList/ContractDetailsList';
 import EmployeeDetailHeader from 'src/sections/@dashboard/Employee/EmployeeForm/EmployeeDetailHeader';
+import CustomerList from 'src/sections/@dashboard/Customer/CustomerList/CustomerList';
+import CustomerCreate from 'src/sections/@dashboard/Customer/CustomerForm/CustomerCreate';
+import SupplierList from 'src/sections/@dashboard/Supplier/SupplierList/SupplierList';
+import SupplierCreate from 'src/sections/@dashboard/Supplier/SupplierForm/SupplierCreate';
+import ExpenseTypeList from 'src/sections/@dashboard/ExpenseType/ExpenseTypeList/ExpenseTypeList';
+import ExpenseTypeCreate from 'src/sections/@dashboard/ExpenseType/ExpenseTypeForm/ExpenseTypeCreate';
+import ExpenseList from 'src/sections/@dashboard/Expense/ExpenseList/ExpenseList';
+import ExpenseCreate from 'src/sections/@dashboard/Expense/ExpenseForm/ExpenseCreate';
 
 // ----------------------------------------------------------------------
 
@@ -105,8 +113,6 @@ export default function Router() {
           ],
         },
 
-      
-
         {
           path: 'permission',
           children: [
@@ -172,7 +178,6 @@ export default function Router() {
             },
           ],
         },
-       
 
         {
           path: 'permission',
@@ -329,7 +334,6 @@ export default function Router() {
           ],
         },
 
-
         // EmployeeD Routs
         {
           path: 'Employee',
@@ -369,40 +373,6 @@ export default function Router() {
             },
           ],
         },
-
-        // EmployeePosition Routs
-        {
-          path: 'EmployeePosition',
-          children: [
-            { element: <Navigate to="/dashboard/EmployeePosition/list" replace />, index: true },
-            {
-              path: 'list',
-              element: (
-                <PermissionBasedGuard hasContent permissions={['EmployeePosition-GetAll']}>
-                  <EmployeePositionList />
-                </PermissionBasedGuard>
-              ),
-            },
-            {
-              path: 'new',
-              element: (
-                <PermissionBasedGuard hasContent permissions={['EmployeePosition-Create']}>
-                  <EmployeePositionCreate />
-                </PermissionBasedGuard>
-              ),
-            },
-            {
-              path: 'edit',
-              element: (
-                <PermissionBasedGuard hasContent permissions={['EmployeePosition-Update']}>
-                  <EmployeePositionCreate />
-                </PermissionBasedGuard>
-              ),
-            },
-          ],
-        },
-
-       
 
         // ContractDetails Routs
         {
@@ -462,6 +432,130 @@ export default function Router() {
               element: (
                 <PermissionBasedGuard hasContent permissions={['PositionTitle-Update']}>
                   <PositionTitleCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+          ],
+        },
+        // Customer Routs
+        {
+          path: 'Customer',
+          children: [
+            { element: <Navigate to="/dashboard/Customer/list" replace />, index: true },
+            {
+              path: 'list',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Customer-GetList']}>
+                  <CustomerList />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'new',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Customer-Create']}>
+                  <CustomerCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'edit',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Customer-Update']}>
+                  <CustomerCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+          ],
+        },
+        // Supplier Routs
+        {
+          path: 'Supplier',
+          children: [
+            { element: <Navigate to="/dashboard/Supplier/list" replace />, index: true },
+            {
+              path: 'list',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Suppliers-GetList']}>
+                  <SupplierList />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'new',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Suppliers-Create']}>
+                  <SupplierCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'edit',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Suppliers-Update']}>
+                  <SupplierCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+          ],
+        },
+        // Expense Type Routs
+        {
+          path: 'ExpenseType',
+          children: [
+            { element: <Navigate to="/dashboard/ExpenseType/list" replace />, index: true },
+            {
+              path: 'list',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['ExpenseTypes-GetList']}>
+                  <ExpenseTypeList />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'new',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['ExpenseTypes-Create']}>
+                  <ExpenseTypeCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'edit',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['ExpenseTypes-Update']}>
+                  <ExpenseTypeCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+          ],
+        },
+        // Expense Routs
+        {
+          path: 'Expense',
+          children: [
+            { element: <Navigate to="/dashboard/Expense/list" replace />, index: true },
+            {
+              path: 'list',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Expenses-GetList']}>
+                  <ExpenseList />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'new',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Expenses-Create']}>
+                  <ExpenseCreate />
+                </PermissionBasedGuard>
+              ),
+            },
+            {
+              path: 'edit',
+              element: (
+                <PermissionBasedGuard hasContent permissions={['Expenses-Update']}>
+                  <ExpenseCreate />
                 </PermissionBasedGuard>
               ),
             },
@@ -649,7 +743,6 @@ const GeneralBooking = Loadable(lazy(() => import('../pages/dashboard/GeneralBoo
 
 // ITSMS
 
-
 // User
 const UserList = Loadable(lazy(() => import('../sections/@dashboard/user/userList/UserList')));
 const UserLogList = Loadable(
@@ -660,7 +753,6 @@ const UserDetailHeader = Loadable(
   lazy(() => import('../sections/@dashboard/user/userForm/UserDetailHeader'))
 );
 
-
 // Language
 const LanguageList = Loadable(
   lazy(() => import('../sections/@dashboard/language/languageList/LanguageList'))
@@ -668,8 +760,6 @@ const LanguageList = Loadable(
 const LanguageCreate = Loadable(
   lazy(() => import('../sections/@dashboard/language/languageForm/LanguageCreate'))
 );
-
-
 
 // Roles
 const RoleList = Loadable(lazy(() => import('../sections/@dashboard/role/roleList/RoleList')));
@@ -683,8 +773,6 @@ const PermissionFrom = Loadable(
   lazy(() => import('../sections/@dashboard/permission/permissionForm/PermissionFrom'))
 );
 
-
-
 //Employee rout
 const EmployeeList = Loadable(
   lazy(() => import('../sections/@dashboard/Employee/EmployeeList/EmployeeList'))
@@ -692,24 +780,6 @@ const EmployeeList = Loadable(
 
 const EmployeeCreate = Loadable(
   lazy(() => import('../sections/@dashboard/Employee/EmployeeForm/EmployeeCreate'))
-);
-
-
-
-
-//EmployeePosition rout
-const EmployeePositionList = Loadable(
-  lazy(
-    () =>
-      import('../sections/@dashboard/EmployeePosition/EmployeePositionList/EmployeePositionList')
-  )
-);
-
-const EmployeePositionCreate = Loadable(
-  lazy(
-    () =>
-      import('../sections/@dashboard/EmployeePosition/EmployeePositionForm/EmployeePositionCreate')
-  )
 );
 
 // Attendance
@@ -727,10 +797,6 @@ const ContractTypeList = Loadable(
 const ContractTypeCreate = Loadable(
   lazy(() => import('../sections/@dashboard/ContractType/ContractTypeForm/ContractTypeCreate'))
 );
-
-
-
-
 
 // ECOMMERCE
 const EcommerceShop = Loadable(lazy(() => import('../pages/dashboard/EcommerceShop')));

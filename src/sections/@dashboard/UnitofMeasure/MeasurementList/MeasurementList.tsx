@@ -29,6 +29,7 @@ import { IUnitOfMeasure } from 'src/@types/foamCompanyTypes/unitOfMeasure';
 import MeasurementTableToolbar from './MeasurementTableToolbar';
 import { ContractTypeTableRow } from '../../ContractType/ContractTypeList';
 import MeasurementDelete from './MeasurementDelete';
+import MeasurementTableRow from './MeasurementTableRow';
 
 // ----------------------------------------------------------------------
 
@@ -182,7 +183,7 @@ export default observer(function MeasurementList() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <ContractTypeTableRow
+                      <MeasurementTableRow
                         key={row.id}
                         row={row}
                         index={index}

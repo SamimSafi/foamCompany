@@ -1,8 +1,10 @@
 export interface IExpenseType {
   id?: number;
   name?: string;
-  description?: string;
-  afterSubmit?:string;
+  englishName?: string;
+  dariName?: string;
+  pashtoName?: string;
+  afterSubmit?: string;
 }
 
 export interface IExpenseTypeParams {

@@ -39,18 +39,20 @@ export default observer(function PositionTitleNewEditForm() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { loadJobPositionDDL, JobPositionOption} =
-    commonDropdown;
+  const { loadJobPositionDDL, JobPositionOption } = commonDropdown;
 
   const NewPositionTitleSchema = Yup.object().shape({
-    name: Yup.string().required(`${translate('Validation.name')}`),
-   
+    englishName: Yup.string().required(`${translate('Validation.EnglishName')}`),
   });
 
   const defaultValues = useMemo<IPositionTitle>(
     () => ({
       id: selectedPositionTitle?.id,
-      name: selectedPositionTitle?.name || '',
+      englishName: selectedPositionTitle?.englishName || '',
+      dariName: selectedPositionTitle?.dariName || '',
+      pashtoName: selectedPositionTitle?.pashtoName || '',
+      code: selectedPositionTitle?.code || '',
+      isActive: selectedPositionTitle?.isActive || undefined,
     }),
     [selectedPositionTitle]
   );
@@ -97,7 +99,6 @@ export default observer(function PositionTitleNewEditForm() {
     }
   }, [reset, editMode, defaultValues]);
 
-
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -112,12 +113,30 @@ export default observer(function PositionTitleNewEditForm() {
               }}
             >
               <RHFTextField
-                name="name"
+                name="englishName"
                 label={translate('GeneralFields.Name')}
                 showAsterisk={true}
                 autoFocus
               />
-             
+              <RHFTextField
+                name="dariName"
+                label={translate('GeneralFields.Name')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <RHFTextField
+                name="pashtoName"
+                label={translate('GeneralFields.Name')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <RHFTextField
+                name="code"
+                label={translate('GeneralFields.Code')}
+                showAsterisk={true}
+                autoFocus
+              />
+              {/* 
               <RHFSelect
                 name="branchId"
                 label={translate('JobPosition.Branch')}
@@ -129,9 +148,7 @@ export default observer(function PositionTitleNewEditForm() {
                     {op.text}
                   </option>
                 ))}
-              </RHFSelect>
-
-             
+              </RHFSelect> */}
             </Box>
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>

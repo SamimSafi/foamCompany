@@ -30,6 +30,7 @@ import MeasurementTableToolbar from './ExpenseTypeTableToolbar';
 import { ContractTypeTableRow } from '../../ContractType/ContractTypeList';
 import MeasurementDelete from './ExpenseTypeDelete';
 import { IExpenseType } from 'src/@types/foamCompanyTypes/expenseType';
+import ExpenseTypeTableRow from './ExpenseTypeTableRow';
 
 // ----------------------------------------------------------------------
 
@@ -70,7 +71,7 @@ export default observer(function ExpenseTypeList() {
   const TABLE_HEAD = [
     { id: 'ID', label: `${translate('GeneralFields.Id')}`, align: 'left' },
     { id: 'Name', label: `${translate('GeneralFields.Name')}`, align: 'left' },
-    { id: 'description', label: `${translate('GeneralFields.description')}`, align: 'left' },
+    // { id: 'description', label: `${translate('GeneralFields.description')}`, align: 'left' },
     { id: '', label: `${translate('GeneralFields.Action')}` },
   ];
   const handleFilterName = (filterName: string) => {
@@ -144,21 +145,21 @@ export default observer(function ExpenseTypeList() {
   const isNotFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Page title={translate('UniteOfMeasure.Title')}>
+    <Page title={translate('Expense.Title')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={translate('UniteOfMeasure.ExpenseTypeList')}
+          heading={translate('Expense.ExpenseTypeList')}
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
 
-            { name: `${translate('UniteOfMeasure.ExpenseTypeList')}` },
+            { name: `${translate('Expense.ExpenseTypeList')}` },
           ]}
           action={
             <Button
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
               component={RouterLink}
-              to={PATH_DASHBOARD.ContractType.new}
+              to={PATH_DASHBOARD.ExpenseType.new}
             >
               {translate('CRUD.Create')}
             </Button>
@@ -183,7 +184,7 @@ export default observer(function ExpenseTypeList() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <ContractTypeTableRow
+                      <ExpenseTypeTableRow
                         key={row.id}
                         row={row}
                         index={index}

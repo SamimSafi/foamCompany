@@ -27,7 +27,7 @@ type Props = {
 export default function ExpenseTypeTableRow({ row, onEditRow, onDeleteRow, index }: Props) {
   const theme = useTheme();
 
-  const { id, name,description } = row;
+  const { id, name } = row;
   const { translate } = useLocales();
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -43,7 +43,6 @@ export default function ExpenseTypeTableRow({ row, onEditRow, onDeleteRow, index
     <TableRow hover>
       <TableCell align="left">{index + 1}</TableCell>
       <TableCell align="left">{name}</TableCell>
-      <TableCell align="left">{description}</TableCell>
 
       <TableCell align="left">
         <TableMoreMenu

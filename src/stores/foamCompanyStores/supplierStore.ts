@@ -45,7 +45,6 @@ export default class supplierStore {
     }
   };
 
-
   // Search
   Supplierearch = async (params: ISupplierParams) => {
     this.SupplierRegistry.clear();
@@ -84,19 +83,19 @@ export default class supplierStore {
   setDetailCloseDialog = () => (this.openDetailDialog = !this.openDetailDialog);
 
   createSupplier = async (Supplier: ISupplier) => {
-      await agentSupplier.Supplier.create(Supplier);
-      runInAction(() => {
-        this.loadSupplier({ pageIndex: 0, pageSize: 5 });
-      });
+    await agentSupplier.Supplier.create(Supplier, Supplier.profilePhoto);
+    runInAction(() => {
+      this.loadSupplier({ pageIndex: 0, pageSize: 5 });
+    });
   };
 
   updateSupplier = async (Supplier: ISupplier) => {
-      await agentSupplier.Supplier.update(Supplier);
-      runInAction(() => {
-        this.loadSupplier({ pageIndex: 0, pageSize: 5 });
-        this.SupplierRegistry.delete(Supplier.id!);
-        this.SupplierRegistry.set(Supplier.id!, Supplier);
-      });
+    await agentSupplier.Supplier.update(Supplier, Supplier.profilePhoto);
+    runInAction(() => {
+      this.loadSupplier({ pageIndex: 0, pageSize: 5 });
+      this.SupplierRegistry.delete(Supplier.id!);
+      this.SupplierRegistry.set(Supplier.id!, Supplier);
+    });
   };
 
   // loadSupplierTypeDropdown = async () => {

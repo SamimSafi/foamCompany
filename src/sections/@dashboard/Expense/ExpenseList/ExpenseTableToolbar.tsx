@@ -3,7 +3,6 @@ import { Stack, InputAdornment, TextField } from '@mui/material';
 import Iconify from '../../../../components/Iconify';
 import useLocales from 'src/hooks/useLocales';
 
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -11,8 +10,7 @@ type Props = {
   onFilterName: (value: string) => void;
 };
 
-export default function EmployeePositionTableToolbar({ filterName, onFilterName }: Props) {
- 
+export default function ExpenseTableToolbar({ filterName, onFilterName }: Props) {
   const { translate } = useLocales();
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
@@ -20,7 +18,7 @@ export default function EmployeePositionTableToolbar({ filterName, onFilterName 
         fullWidth
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
-        placeholder={translate('EmployeePosition.Placeholder')}
+        placeholder={translate('ExpenseType.Placeholder')}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

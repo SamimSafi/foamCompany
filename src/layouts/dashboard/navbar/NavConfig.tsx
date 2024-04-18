@@ -75,9 +75,9 @@ const navConfig = [
         roles: [
           'Language-GetList',
           'Year-GetList',
-          'ContractType-GetAll',
-          'PositionTitle-GetAll',
-          'JobPosition-GetAll',
+          'ContractType-GetList',
+          'PositionTitle-GetList',
+          'JobPosition-GetList',
         ],
         children: [
           {
@@ -102,30 +102,45 @@ const navConfig = [
                 path: PATH_DASHBOARD.Language.list,
                 roles: ['Language-GetList'],
               },
+              {
+                title: 'expenseType',
+                path: PATH_DASHBOARD.ExpenseType.list,
+                roles: ['ExpenseType-GetList'],
+              },
+              {
+                title: 'contractType',
+                path: PATH_DASHBOARD.ContractType.list,
+                roles: ['ExpenseType-GetList'],
+              },
+              {
+                title: 'positionTitle',
+                path: PATH_DASHBOARD.PositionTitle.list,
+                roles: ['PositionTitle-GetList'],
+              },
             ],
           },
           //HR lookups Table
           {
             title: 'HRLookupTables',
             path: '#5',
-            roles: ['ContractType-GetAll', 'PositionTitle-GetAll', 'JobPosition-GetAll'],
+            roles: ['ContractType-GetList', 'PositionTitle-GetList', 'JobPosition-GetList'],
             children: [
               {
                 title: 'contractType',
                 path: PATH_DASHBOARD.ContractType.list,
-                roles: ['ContractType-GetAll'],
+                roles: ['ContractType-GetList'],
               },
 
               {
                 title: 'positionTitle',
                 path: PATH_DASHBOARD.PositionTitle.list,
-                roles: ['PositionTitle-GetAll'],
+                roles: ['PositionTitle-GetList'],
               },
 
               {
                 title: 'jobPosition',
                 path: PATH_DASHBOARD.JobPosition.list,
-                roles: ['JobPosition-GetAll'],
+                roles: ['JobPosition-GetList'],
               },
             ],
           },
@@ -139,10 +154,10 @@ const navConfig = [
         icon: ICONS.ums,
         roles: [
           'User-Create',
-          'User-GetAll',
+          'User-GetList',
           'Profile-ChangePassword',
-          'Permission-GetAll',
-          'Role-GetAll',
+          'Permission-GetList',
+          'Role-GetList',
           'Role-Create',
           'Application-GetList',
         ],
@@ -150,10 +165,10 @@ const navConfig = [
           {
             title: 'UserManagement',
             path: '#2',
-            roles: ['User-Create', 'User-GetAll', 'User-UserLog', 'Profile-ChangePassword'],
+            roles: ['User-Create', 'User-GetList', 'User-UserLog', 'Profile-ChangePassword'],
             children: [
               { title: 'createUser', path: PATH_DASHBOARD.user.new, roles: ['User-Create'] },
-              { title: 'Userlist', path: PATH_DASHBOARD.user.list, roles: ['User-GetAll'] },
+              { title: 'Userlist', path: PATH_DASHBOARD.user.list, roles: ['User-GetList'] },
               { title: 'UserLogList', path: PATH_DASHBOARD.user.Loglist, roles: ['User-UserLog'] },
               {
                 title: 'UserReport',
@@ -169,18 +184,22 @@ const navConfig = [
           {
             title: 'Permission',
             path: '#3',
-            roles: ['Permission-GetAll'],
+            roles: ['Permission-GetList'],
             children: [
-              { title: 'list', path: PATH_DASHBOARD.Permission.list, roles: ['Permission-GetAll'] },
+              {
+                title: 'list',
+                path: PATH_DASHBOARD.Permission.list,
+                roles: ['Permission-GetList'],
+              },
               // { title: 'create', path: PATH_DASHBOARD.Permission.new },
             ],
           },
           {
             title: 'Role',
             path: '#4',
-            roles: ['Role-GetAll', 'Role-Create'],
+            roles: ['Role-GetList', 'Role-Create'],
             children: [
-              { title: 'list', path: PATH_DASHBOARD.Role.list, roles: ['Role-GetAll'] },
+              { title: 'list', path: PATH_DASHBOARD.Role.list, roles: ['Role-GetList'] },
               { title: 'create', path: PATH_DASHBOARD.Role.new, roles: ['Role-Create'] },
             ],
           },
@@ -191,12 +210,12 @@ const navConfig = [
         title: 'hr',
         path: '#1',
         icon: ICONS.hr,
-        roles: ['Employee-GetAll', 'CardDetails-GetPrintableCardList'],
+        roles: ['Employee-GetList', 'CardDetails-GetPrintableCardList'],
         children: [
           {
             title: 'emp',
             path: PATH_DASHBOARD.Employee.list,
-            roles: ['Employee-GetAll'],
+            roles: ['Employee-GetList'],
           },
           {
             title: 'cardPrint',
@@ -217,13 +236,21 @@ const navConfig = [
 
       // Employee Attendance
       {
-        title: 'attendance',
+        title: 'supplier',
         path: '#1',
-        icon: ICONS.calendar,
+        icon: ICONS.reception,
         children: [
           {
-            title: 'attendance',
-            path: PATH_DASHBOARD.EmployeeAttendance.list,
+            title: 'Supplier',
+            path: PATH_DASHBOARD.Supplier.list,
+          },
+          {
+            title: 'Customer',
+            path: PATH_DASHBOARD.Customer.list,
+          },
+          {
+            title: 'Expense',
+            path: PATH_DASHBOARD.Expense.list,
           },
         ],
       },

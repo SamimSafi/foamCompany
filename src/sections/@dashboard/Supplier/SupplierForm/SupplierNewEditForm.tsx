@@ -63,6 +63,12 @@ export default observer(function SupplierNewEditForm() {
   const { translate } = useLocales();
   const [muiPhone, setMuiPhone] = useState('+93');
 
+  const [isImageUpdate, setIsImageUpdated] = useState(false);
+
+  const cropperRef = useRef<ReactCropperElement>(null);
+  const [imageSrc, setImageSrc] = useState<string>('');
+  const [croppedImage, setCroppedImage] = useState<string>('');
+
   const { createSupplier, updateSupplier, editMode, selectedSupplier, clearSelectedSupplier } =
     supplierStore;
   const { loadProvinceDropdown, loadDistrictDropdown, ProvinceOption, DistrictOption } =
@@ -74,9 +80,8 @@ export default observer(function SupplierNewEditForm() {
   // const phoneRegExp =
   //   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
   const NewEmployeeSchema = Yup.object().shape({
-    name: Yup.string().required(`${translate('Validation.Name')}`),
-    fatherName: Yup.string().required(`${translate('Validation.FatherName')}`),
-    pashtoFirstName: Yup.string().required(`${translate('Validation.PashtoName')}`),
+    englishFirstName: Yup.string().required(`${translate('Validation.Name')}`),
+    pashtoFirstName: Yup.string().required(`${translate('Validation.Name')}`),
     englishSurName: Yup.string().required(`${translate('Validation.EnglishSurName')}`),
     pashtoSurName: Yup.string().required(`${translate('Validation.PashtoSurName')}`),
     englishFatherName: Yup.string().required(
@@ -85,52 +90,22 @@ export default observer(function SupplierNewEditForm() {
     pashtoFatherName: Yup.string().required(`${translate('Validation.FatherDariNameIsRequired')}`),
     englishGrandFatherName: Yup.string().required(`${translate('Validation.GrandFatherEnglish')}`),
     pashtoGrandFatherName: Yup.string().required(`${translate('Validation.GrandFatherPashto')}`),
-    tazkiraNo: Yup.string().required(`${translate('Validation.CNIC')}`),
-    dateOfBirth: Yup.date().required(`${translate('Validation.DateOfBirth')}`),
-    temporaryAddress: Yup.string().required(`${translate('Validation.TemporaryAddress')}`),
-    permenantAddress: Yup.string().required(`${translate('Validation.PermanentAddress')}`),
-    attendanceId: Yup.number().required(`${translate('Validation.AttendanceId')}`),
-    provinceName: Yup.string().required(`${translate('Validation.Province')}`),
-    districtName: Yup.string().required(`${translate('Validation.District')}`),
-    healthStatusName: Yup.string().required(`${translate('Validation.EmployeeHealthStatus')}`),
-    departmentName: !editMode
-      ? Yup.string().required(`${translate('Validation.Directorate')}`)
-      : Yup.string(),
-    genderId: Yup.string().required(`${translate('Validation.Gender')}`),
-    // bloodGroup: Yup.string().required(`${translate('Validation.BloodGroup')}`),
-    joinDate: Yup.date().required(`${translate('Validation.JoinDate')}`),
-    // personalEmail: Yup.string()
-    //   .email()
-    //   .required(`${translate('Validation.PersonalEmail')}`),
-    // officialEmail: Yup.string()
-    //   .email()
-    //   .required(`${translate('Validation.OfficialEmail')}`),
-    // phoneNumber: Yup.string()
-    //   .matches(phoneRegExp, `${translate('User.NumberFormat')}`)
-    //   .matches(/^\+937[0-9]{8}$/, `${translate('User.NumberFormat')}`)
-    //   .length(12, 'Phone Number must be 12 digit')
-    //   .required('Phone Number is required'),
-    // emergencyPhoneNumber: Yup.string()
-    //   .matches(phoneRegExp, `${translate('User.NumberFormat')}`)
-    //   // .matches(/^\+937[0-9]{8}$/, `${translate('User.NumberFormat')}`)
-    //   // .length(12, 'Phone Number must be 12 digit')
-    //   .required('Phone Number is required'),
-    // rfidNumber: Yup.string().required(`${translate('Validation.RFID')}`),
-    isCurrent: !editMode
-      ? Yup.boolean().required(`${translate('Validation.isCurrent')}`)
-      : Yup.string(),
-    // profilePhoto: !editMode
-    //   ? Yup.string()
-    //       .nullable()
-    //       .required(`${translate('Validation.ProfilePhoto')}`)
-    //   : Yup.string(),
+    phoneNumber: Yup.string()
+      .length(12, 'Phone Number must be 12 digit')
+      .required('Phone Number is required'),
   });
 
   const defaultValues = useMemo<ISupplier>(
     () => ({
       id: selectedSupplier?.id,
-      name: selectedSupplier?.name || '',
-      fatherName: selectedSupplier?.fatherName || '',
+      englishFirstName: selectedSupplier?.englishFirstName || '',
+      pashtoFirstName: selectedSupplier?.pashtoFirstName || '',
+      englishSurName: selectedSupplier?.englishSurName || '',
+      pashtoSurName: selectedSupplier?.pashtoSurName || '',
+      englishFatherName: selectedSupplier?.englishFatherName || '',
+      pashtoFatherName: selectedSupplier?.pashtoFatherName || '',
+      englishGrandFatherName: selectedSupplier?.englishGrandFatherName || '',
+      pashtoGrandFatherName: selectedSupplier?.pashtoGrandFatherName || '',
       email: selectedSupplier?.email || '',
       phone: selectedSupplier?.phone || '',
       location: selectedSupplier?.location || '',
@@ -157,12 +132,13 @@ export default observer(function SupplierNewEditForm() {
 
   const onSubmit = (data: ISupplier) => {
     if (data.id! === undefined) {
+      data.profilePhoto = methods.getValues().profilePhoto;
       ///create
       createSupplier(data)
         .then(() => {
           clearSelectedSupplier();
           enqueueSnackbar(`${translate('Tostar.CreateSuccess')}`);
-          navigate(PATH_DASHBOARD.Employee.list);
+          navigate(PATH_DASHBOARD.Supplier.list);
         })
         .catch((err) => {
           var json = JSON.parse(err.request.response);
@@ -187,12 +163,16 @@ export default observer(function SupplierNewEditForm() {
         });
     } else {
       ///update
-
+      if (!isImageUpdate) {
+        data.profilePhoto = null;
+      } else {
+        data.profilePhoto = methods.getValues().profilePhoto;
+      }
       updateSupplier(data)
         .then(() => {
           clearSelectedSupplier();
           enqueueSnackbar(`${translate('Tostar.UpdateSuccess')}`);
-          navigate(PATH_DASHBOARD.Employee.list);
+          navigate(PATH_DASHBOARD.Supplier.list);
         })
         .catch((err) => {
           console.log(err);
@@ -228,6 +208,51 @@ export default observer(function SupplierNewEditForm() {
     }
   }, [reset, editMode, defaultValues]);
 
+  const handleDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (file) {
+      console.log(file);
+
+      setImageSrc(URL.createObjectURL(file));
+      //setValue('profilePhoto',URL.createObjectURL(file))
+      setCroppedImage('');
+    }
+  }, []);
+
+  const handleCropImage = useCallback(() => {
+    if (cropperRef.current) {
+      if (editMode) {
+        setIsImageUpdated(true);
+      }
+      const canvas = cropperRef.current?.cropper;
+      if (canvas) {
+        // Convert the canvas to a Blob object
+        canvas.getCroppedCanvas().toBlob((blob: any) => {
+          if (blob) {
+            // Create a new File object with the Blob and set it as the value for 'profilePhoto'
+            const croppedFile = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
+
+            setValue(
+              'profilePhoto',
+              Object.assign(croppedFile, {
+                preview: URL.createObjectURL(croppedFile),
+              })
+            );
+
+            setImageSrc('');
+          }
+        }, 'image/jpeg');
+        // Convert the canvas to a data URL and set it as the cropped image
+        const croppedDataURL = canvas.getCroppedCanvas().toDataURL();
+        setCroppedImage(croppedDataURL);
+      }
+    }
+  }, []);
+
+  const handleCancelCrop = useCallback(() => {
+    setCroppedImage('');
+  }, []);
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       {!!errors.afterSubmit && (
@@ -237,9 +262,72 @@ export default observer(function SupplierNewEditForm() {
       )}
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={4}>
+          <Card sx={{ py: 13, px: 3, borderRadius: '15px 15px 15px 15px' }}>
+            <Fieldset legend={translate('Employee.ProfilePhoto')}>
+              {editMode && (
+                <Label
+                  //color={values !== 'active' ? 'error' : 'success'}
+                  sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+                ></Label>
+              )}
+              <Box sx={{ mb: 3 }}>
+                <RHFUploadAvatar
+                  name="profilePhoto"
+                  accept="image/*"
+                  onDrop={handleDrop}
+                  maxSize={3145728}
+                  showAsterisk={true}
+                  helperText={
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mt: 2,
+                        mx: 'auto',
+                        display: 'block',
+                        textAlign: 'center',
+                        color: 'text.secondary',
+                      }}
+                    >
+                      {translate('User.Allowed')}
+                      <br /> {translate('User.MaxSize')} {fData(3145728)}
+                    </Typography>
+                  }
+                />
+                {imageSrc && (
+                  <Box>
+                    <Cropper
+                      src={imageSrc}
+                      style={{ width: '100%', height: '100%' }}
+                      aspectRatio={16 / 16}
+                      guides={true}
+                      ref={cropperRef}
+                    />
+                    {croppedImage ? (
+                      <Box>
+                        <img src={croppedImage} alt="Cropped" />
+                        <button onClick={() => handleCropImage()}>Cancel Crop</button>
+                      </Box>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        size="small"
+                        fullWidth
+                        sx={{ mt: 1 }}
+                        onClick={() => handleCropImage()}
+                      >
+                        {translate('Employee.CropImage')}
+                      </Button>
+                    )}
+                  </Box>
+                )}
+              </Box>
+            </Fieldset>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={8}>
           <Card sx={{ p: 3, borderRadius: '15px 15px 15px 15px' }}>
-            <Fieldset legend={translate('Employee.EnglishBioData')}>
+            <Fieldset legend={translate('Supplier.BioData')}>
               <Box
                 sx={{
                   display: 'grid',
@@ -250,14 +338,49 @@ export default observer(function SupplierNewEditForm() {
                 }}
               >
                 <RHFTextField
-                  name="name"
+                  name="englishFirstName"
                   label={translate('Employee.EnglishName')}
                   showAsterisk={true}
                   autoFocus
                 />
                 <RHFTextField
-                  name="fatherName"
+                  name="pashtoFirstName"
+                  label={translate('Employee.PashtoName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishSurName"
                   label={translate('Employee.englishSurName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="pashtoSurName"
+                  label={translate('Employee.pashtoSurName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishFatherName"
+                  label={translate('Employee.FatherEnglishName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="pashtoFatherName"
+                  label={translate('Employee.FatherDariName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishGrandFatherName"
+                  label={translate('Employee.englishGrandFatherName')}
+                  showAsterisk={true}
+                />
+                <RHFTextField
+                  name="pashtoGrandFatherName"
+                  label={translate('Employee.pashtoGrandFatherName')}
                   showAsterisk={true}
                 />
               </Box>
@@ -320,7 +443,7 @@ export default observer(function SupplierNewEditForm() {
                   startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
                   onClick={() => {
                     clearSelectedSupplier();
-                    navigate(PATH_DASHBOARD.Employee.list);
+                    navigate(PATH_DASHBOARD.Supplier.list);
                   }}
                 >
                   {translate('CRUD.BackToList')}

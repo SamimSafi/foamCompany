@@ -10,13 +10,14 @@ import { TableMoreMenu } from '../../../../components/table';
 import useLocales from 'src/hooks/useLocales';
 import { IEmployee } from 'src/@types/foamCompanyTypes/Employee';
 import PermissionBasedGuard from 'src/guards/PermissionBasedGuard';
+import { ISupplier } from 'src/@types/foamCompanyTypes/Supplier';
 
 // ----------------------------------------------------------------------
 
 const language = window.localStorage.getItem('i18nextLng');
 
 type Props = {
-  row: IEmployee;
+  row: ISupplier;
   index: any;
   onEditRow: VoidFunction;
   onCreateUser: VoidFunction;
@@ -42,15 +43,7 @@ export default function SupplierTableRow({
 }: Props) {
   const theme = useTheme();
   const language = window.localStorage.getItem('i18nextLng');
-  const {
-    id,
-    fatherName,
-    profilePhoto,
-    phoneNumber,
-    name,
-    provinceName,
-    districtName,tazkiraNo,gender,age
-  } = row;
+  const { id, surName, phone, email, name, location } = row;
   const { translate } = useLocales();
   const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
 
@@ -78,11 +71,11 @@ export default function SupplierTableRow({
         <TableCell align="left">{name}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {fatherName}
+          {surName}
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {provinceName}
+          {email}
         </TableCell>
 
         <TableCell
@@ -90,7 +83,7 @@ export default function SupplierTableRow({
           sx={{ textTransform: 'capitalize', alignItems: 'left' }}
           dir={language === 'en' ? 'ltr' : 'ltr'}
         >
-          {phoneNumber}
+          {phone}
         </TableCell>
 
         <TableCell align="left">

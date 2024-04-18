@@ -53,12 +53,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import React from 'react';
 import CustomRHFAutocomplete from 'src/components/hook-form/CustomRHFAutocomplete';
 import uuid from 'react-uuid';
+import { ICustomer } from 'src/@types/foamCompanyTypes/customer';
 
 // ----------------------------------------------------------------------
 
 export default observer(function CustomerNewEditForm() {
   const language = window.localStorage.getItem('i18nextLng');
-  const { EmployeeStore, commonDropdown } = useStore();
+  const { customerStore, commonDropdown } = useStore();
   const { translate } = useLocales();
   const [isImageUpdate, setIsImageUpdated] = useState(false);
   const [muiPhone, setMuiPhone] = useState('+93');
@@ -67,25 +68,13 @@ export default observer(function CustomerNewEditForm() {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [croppedImage, setCroppedImage] = useState<string>('');
 
-
   const [provinceName, setProvinceName] = useState<string | undefined>('');
   const [districtName, setDistrictName] = useState<string | undefined>('');
 
-
-  const {
-    createEmployee,
-    updateEmployee,
-    editMode,
-    selectedEmployee,
-    clearSelectedEmployee,
-    employeeForEdit,
-  } = EmployeeStore;
-  const {
-    loadProvinceDropdown,
-    loadDistrictDropdown,
-    ProvinceOption,
-    DistrictOption,
-  } = commonDropdown;
+  const { createCustomer, updateCustomer, editMode, selectedCustomer, clearSelectedCustomer } =
+    customerStore;
+  const { loadProvinceDropdown, loadDistrictDropdown, ProvinceOption, DistrictOption } =
+    commonDropdown;
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -115,7 +104,7 @@ export default observer(function CustomerNewEditForm() {
     departmentName: !editMode
       ? Yup.string().required(`${translate('Validation.Directorate')}`)
       : Yup.string(),
-      genderId: Yup.string().required(`${translate('Validation.Gender')}`),
+    genderId: Yup.string().required(`${translate('Validation.Gender')}`),
     // bloodGroup: Yup.string().required(`${translate('Validation.BloodGroup')}`),
     joinDate: Yup.date().required(`${translate('Validation.JoinDate')}`),
     // personalEmail: Yup.string()
@@ -145,28 +134,23 @@ export default observer(function CustomerNewEditForm() {
     //   : Yup.string(),
   });
 
-  const defaultValues = useMemo<IEmployee>(
+  const defaultValues = useMemo<ICustomer>(
     () => ({
-      id: employeeForEdit?.id,
-      tazkiraTypeId: employeeForEdit?.tazkiraTypeId || 1,
-      branchId: employeeForEdit?.branchId || 1,
-      joldNo: employeeForEdit?.joldNo || '',
-      pageNo: employeeForEdit?.pageNo || '',
-      regNo: employeeForEdit?.regNo || '',
-      tazkiraNo: employeeForEdit?.tazkiraNo || '',
-      dateOfBirth: employeeForEdit?.dateOfBirth || new Date(),
-      provinceId: employeeForEdit?.provinceId || 1,
-      districtId: employeeForEdit?.districtId || undefined,
-      phoneNumber: employeeForEdit?.phoneNumber || '',
-      photoPath: employeeForEdit?.photoPath || undefined,
-      profilePhoto: employeeForEdit?.profilePhoto || null,
-      gender: employeeForEdit?.gender || '',
-      name: employeeForEdit?.name || '',
-      fatherName: employeeForEdit?.fatherName || '',
-      age: employeeForEdit?.age || '',
-      isInvestor: employeeForEdit?.isInvestor || true,
+      id: selectedCustomer?.id,
+      englishFirstName: selectedCustomer?.englishFirstName || '',
+      pashtoFirstName: selectedCustomer?.pashtoFirstName || '',
+      englishSurName: selectedCustomer?.englishSurName || '',
+      pashtoSurName: selectedCustomer?.pashtoSurName || '',
+      englishFatherName: selectedCustomer?.englishFatherName || '',
+      pashtoFatherName: selectedCustomer?.pashtoFatherName || '',
+      englishGrandFatherName: selectedCustomer?.englishGrandFatherName || '',
+      pashtoGrandFatherName: selectedCustomer?.pashtoGrandFatherName || '',
+      profilePhoto: selectedCustomer?.profilePhoto || null,
+      email: selectedCustomer?.email || '',
+      phone: selectedCustomer?.phone || '',
+      location: selectedCustomer?.location || '',
     }),
-    [employeeForEdit]
+    [selectedCustomer]
   );
 
   const methods = useForm<IEmployee>({
@@ -190,9 +174,9 @@ export default observer(function CustomerNewEditForm() {
     if (data.id! === undefined) {
       ///create
       data.profilePhoto = methods.getValues().profilePhoto;
-      createEmployee(data)
+      createCustomer(data)
         .then(() => {
-          clearSelectedEmployee();
+          clearSelectedCustomer();
           enqueueSnackbar(`${translate('Tostar.CreateSuccess')}`);
           navigate(PATH_DASHBOARD.Employee.list);
         })
@@ -225,9 +209,9 @@ export default observer(function CustomerNewEditForm() {
       } else {
         data.profilePhoto = methods.getValues().profilePhoto;
       }
-      updateEmployee(data)
+      updateCustomer(data)
         .then(() => {
-          clearSelectedEmployee();
+          clearSelectedCustomer();
           enqueueSnackbar(`${translate('Tostar.UpdateSuccess')}`);
           navigate(PATH_DASHBOARD.Employee.list);
         })
@@ -256,12 +240,10 @@ export default observer(function CustomerNewEditForm() {
     }
   };
 
-
-
   useEffect(() => {
     if (editMode) {
       reset(defaultValues);
-      setMuiPhone(defaultValues.phoneNumber!);
+      setMuiPhone(defaultValues.phone!);
     }
     if (!editMode) {
       loadProvinceDropdown();
@@ -269,45 +251,6 @@ export default observer(function CustomerNewEditForm() {
       reset(defaultValues);
     }
   }, [reset, editMode, defaultValues]);
-
-  useEffect(() => {
-    if (val.provinceId) {
-      loadDistrictDropdown(val.provinceId);
-    }
-  }, [val.provinceId]);
-
-  useEffect(() => {
-    if (editMode) {
-      if (defaultValues.provinceId) {
-        loadProvinceDropdown().then((res) => {
-          setProvinceName(ProvinceOption.find((e) => e.value === defaultValues.provinceId)?.text);
-        });
-      }
-    }
-  }, [provinceName]);
-
-
-
-  useEffect(() => {
-    if (editMode) {
-      if (defaultValues.provinceId) {
-        loadDistrictDropdown(val.provinceId).then((res) => {
-          setDistrictName(DistrictOption.find((e) => e.value === defaultValues.districtId)?.text);
-        });
-      }
-    }
-  }, [districtName]);
-
-
-
-  useEffect(() => {
-    setValue('provinceName', provinceName);
-  }, [provinceName]);
-
-  useEffect(() => {
-    setValue('districtName', districtName);
-  }, [districtName]);
-
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -363,11 +306,6 @@ export default observer(function CustomerNewEditForm() {
     { title: 'O-', value: 'O-' },
     { title: 'AB+', value: 'AB+' },
     { title: 'AB-', value: 'AB-' },
-  ];
-
-  const TazkiraType = [
-    { title: 1, value: `${translate('Employee.ETazkira')}` },
-    { title: 2, value: `${translate('Employee.PaperBaseTazkira')}` },
   ];
 
   return (
@@ -444,7 +382,7 @@ export default observer(function CustomerNewEditForm() {
         </Grid>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3, borderRadius: '15px 15px 15px 15px' }}>
-            <Fieldset legend={translate('Employee.EnglishBioData')}>
+            <Fieldset legend={translate('Customer.Bio')}>
               <Box
                 sx={{
                   display: 'grid',
@@ -455,17 +393,52 @@ export default observer(function CustomerNewEditForm() {
                 }}
               >
                 <RHFTextField
-                  name="name"
+                  name="englishFirstName"
                   label={translate('Employee.EnglishName')}
                   showAsterisk={true}
                   autoFocus
                 />
                 <RHFTextField
-                  name="fatherName"
+                  name="pashtoFirstName"
+                  label={translate('Employee.PashtoName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishSurName"
                   label={translate('Employee.englishSurName')}
                   showAsterisk={true}
+                  autoFocus
                 />
-                </Box>
+                <RHFTextField
+                  name="pashtoSurName"
+                  label={translate('Employee.pashtoSurName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishFatherName"
+                  label={translate('Employee.FatherEnglishName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="pashtoFatherName"
+                  label={translate('Employee.FatherDariName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishGrandFatherName"
+                  label={translate('Employee.englishGrandFatherName')}
+                  showAsterisk={true}
+                />
+                <RHFTextField
+                  name="pashtoGrandFatherName"
+                  label={translate('Employee.pashtoGrandFatherName')}
+                  showAsterisk={true}
+                />
+              </Box>
             </Fieldset>
 
             <Fieldset legend={translate('Employee.EmployeeGeneralInfo')}>
@@ -477,16 +450,9 @@ export default observer(function CustomerNewEditForm() {
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
                 }}
               >
-                <LocalizDatePicker
-                  name="dateOfBirth"
-                  label={translate('Employee.dateOfBirth')}
-                  control={control}
-                  showAsterisk={true}
-                />
-         
                 <RHFTextField
-                  name="gender"
-                  label={translate('Employee.Gender')}
+                  name="email"
+                  label={translate('Employee.Email')}
                   showAsterisk={true}
                 />
 
@@ -494,107 +460,13 @@ export default observer(function CustomerNewEditForm() {
                   value={muiPhone}
                   dir={language === 'en' ? 'ltr' : 'ltr'}
                   onChange={(Phone) => setMuiPhone(Phone)}
-                  name="phoneNumber"
+                  name="phone"
                   customFlag={CustomFlag}
                 />
-
-
-                <RHFSelect name="branchId" label={translate('Employee.Branch')}>
-                  <option value="" />
-                  {bloodGroup.map((op) => (
-                    <option key={op.value} value={op.title}>
-                      {op.title}
-                    </option>
-                  ))}
-                </RHFSelect>
-
-                <RHFSelect
-                  name="tazkiraTypeId"
-                  label={translate('Employee.TazkiraType')}
-                  onChange={(e) => setValue('tazkiraTypeId', parseInt(e.target.value))}
-                >
-                  <option value="" />
-                  {TazkiraType.map((op) => (
-                    <option key={op.title} value={op.title}>
-                      {op.value}
-                    </option>
-                  ))}
-                </RHFSelect>
-
                 <RHFTextField
-                  name="tazkiraNo"
-                  label={translate('Employee.cnic')}
+                  name="location"
+                  label={translate('Supplier.location')}
                   showAsterisk={true}
-                />
-
-                {val.tazkiraTypeId === 2 && (
-                  <>
-                    <RHFTextField name="joldNo" label={translate('Employee.JoldNo')} />
-                    <RHFTextField name="pageNo" label={translate('Employee.PageNo')} />
-                    <RHFTextField name="regNo" label={translate('Employee.RegNo')} />
-                  </>
-                )}
-
-                <CustomRHFAutocomplete
-                  name="provinceName"
-                  label={translate('Employee.Province')}
-                  showAsterisk={true}
-                  //placeholder={translate('Employee.Department')}
-                  value={watch('provinceName') || ''}
-                  options={ProvinceOption.map((i) => i.text)}
-                  getOptionLabel={(option: any) => `${option}`}
-                  onChange={(event, newValue: any) => {
-                    const find = ProvinceOption.filter((item) => item.text === newValue)[0];
-
-                    if (find) {
-                      const id = find?.value;
-                      setValue('provinceId', Number(id));
-                      setValue(`provinceName`, find?.text);
-                    } else {
-                      setValue('provinceId', undefined);
-                      setValue(`provinceName`, '');
-                    }
-                  }}
-                  freeSolo
-                  fullWidth
-                  renderOption={(props, option: any) => {
-                    return (
-                      <li {...props} key={option + '-' + uuid()}>
-                        {option}
-                      </li>
-                    );
-                  }}
-                />
-
-                <CustomRHFAutocomplete
-                  name="districtName"
-                  label={translate('Employee.District')}
-                  showAsterisk={true}
-                  //placeholder={translate('Employee.Department')}
-                  value={watch('districtName') || ''}
-                  options={DistrictOption.map((i) => i.text)}
-                  getOptionLabel={(option: any) => `${option}`}
-                  onChange={(event, newValue: any) => {
-                    const find = DistrictOption.filter((item) => item.text === newValue)[0];
-
-                    if (find) {
-                      const id = find?.value;
-                      setValue('districtId', Number(id));
-                      setValue(`districtName`, find?.text);
-                    } else {
-                      setValue('districtId', undefined);
-                      setValue(`districtName`, '');
-                    }
-                  }}
-                  freeSolo
-                  fullWidth
-                  renderOption={(props, option: any) => {
-                    return (
-                      <li {...props} key={option + '-' + uuid()}>
-                        {option}
-                      </li>
-                    );
-                  }}
                 />
               </Box>
               <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
@@ -615,7 +487,7 @@ export default observer(function CustomerNewEditForm() {
                   color="error"
                   startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
                   onClick={() => {
-                    clearSelectedEmployee();
+                    clearSelectedCustomer();
                     navigate(PATH_DASHBOARD.Employee.list);
                   }}
                 >

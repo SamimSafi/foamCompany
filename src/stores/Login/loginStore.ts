@@ -1,5 +1,13 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { GetUserDataforLocalStorage, LoginFormValue, ResetPassword, SendVerificationCode, User, VerificationCodeResponse, VerifyVerificationCode } from 'src/@types/login';
+import {
+  GetUserDataforLocalStorage,
+  LoginFormValue,
+  ResetPassword,
+  SendVerificationCode,
+  User,
+  VerificationCodeResponse,
+  VerifyVerificationCode,
+} from 'src/@types/login';
 import agent from '../../api/agent';
 import { store } from '../store';
 import { language } from 'src/utils/general';
@@ -40,9 +48,7 @@ export default class LoginStore {
       runInAction(() => {
         this.user = getuser;
         const empID = getuser.EmployeeProfileId;
-        const depID = getuser.DepartmentId;
         window.localStorage.setItem('empID', empID!.toString());
-        window.localStorage.setItem('departmentID', depID!.toString());
         this.userData = {
           IsSuperAdmin: getuser.IsSuperAdmin,
           AttendanceId: getuser.AttendanceId!,
@@ -63,31 +69,24 @@ export default class LoginStore {
     }
   };
 
-
   SendVerificationCode = async (data: SendVerificationCode) => {
-   
-      const sendCode = await agent.Logins.SendCode(data);
-      runInAction(() => {
-        window.localStorage.setItem('email-recovery', data.email);
-      });
+    const sendCode = await agent.Logins.SendCode(data);
+    runInAction(() => {
+      window.localStorage.setItem('email-recovery', data.email);
+    });
   };
 
   VerifyVerificationCode = async (data: VerifyVerificationCode) => {
- 
-      const sendCode = await agent.Logins.VerifyCode(data);
-      runInAction(() => {
-        window.localStorage.setItem('email-recovery', data.email!);
-        window.localStorage.setItem('user-id',sendCode.data)
-      });
+    const sendCode = await agent.Logins.VerifyCode(data);
+    runInAction(() => {
+      window.localStorage.setItem('email-recovery', data.email!);
+      window.localStorage.setItem('user-id', sendCode.data);
+    });
   };
 
   ResetPassword = async (data: ResetPassword) => {
-      const sendCode = await agent.Logins.ResetPassword(data);
-
-
+    const sendCode = await agent.Logins.ResetPassword(data);
   };
-
-
 
   logout = () => {
     store.CommonStore.setToken(null);
@@ -130,7 +129,7 @@ export default class LoginStore {
     const expire = new Date(userToken);
 
     console.log(expire.getTime() - Date.now() - 30 * 1000);
-    
+
     const timeout = expire.getTime() - Date.now() - 30 * 1000; //Token Will Refresh 30sec Before Expire
     this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
   }

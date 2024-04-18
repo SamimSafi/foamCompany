@@ -13,7 +13,6 @@ import commonDropdown from './CommonDropdwon/commonDropdown';
 
 import userPerformenceDashboardStore from './userPerformenceDashboard/userPerformenceDashboardStore';
 
-import EmployeePositionStore from './EmployeePosition/EmployeePositionStore';
 import EmployeeStore from './Employee/EmployeeStore';
 
 import userDashboardStore from './userDashboard/userDashboardStore';
@@ -32,7 +31,7 @@ import ExpenseTypeStore from './foamCompanyStores/ExpenseTypeStore';
 import investorStore from './foamCompanyStores/investorStore';
 import customerStore from './foamCompanyStores/customerStore';
 import supplierStore from './foamCompanyStores/supplierStore';
-
+import ExpenseStore from './foamCompanyStores/ExpenseStore';
 
 interface Store {
   LoginStore: LoginStore;
@@ -48,8 +47,6 @@ interface Store {
   // Common Drop Down For All System
   commonDropdown: commonDropdown;
 
-
-
   // user Performence Dashboard and Report
   userPerformenceDashboardStore: userPerformenceDashboardStore;
 
@@ -57,12 +54,9 @@ interface Store {
 
   // Employee
   EmployeeStore: EmployeeStore;
-  //Employee Position
-  EmployeePositionStore: EmployeePositionStore;
-
 
   ContractDetailsStore: ContractDetailsStore;
-  
+
   // User Dashboard
   userDashboardStore: userDashboardStore;
 
@@ -70,7 +64,6 @@ interface Store {
   ProvinceStore: ProvinceStore;
   // District
   DistrictStore: DistrictStore;
-
 
   //ContractType
   ContractTypeStore: ContractTypeStore;
@@ -80,12 +73,13 @@ interface Store {
   JobPositionStore: JobPositionStore;
 
   // Foam Company Stores
-  branchStore:branchStore;
-  uniteOfMeasureStore:uniteOfMeasureStore;
-  ExpenseTypeStore:ExpenseTypeStore;
-  investorStore:investorStore;
-  customerStore:customerStore;
-  supplierStore:supplierStore;
+  branchStore: branchStore;
+  uniteOfMeasureStore: uniteOfMeasureStore;
+  ExpenseTypeStore: ExpenseTypeStore;
+  investorStore: investorStore;
+  customerStore: customerStore;
+  supplierStore: supplierStore;
+  ExpenseStore: ExpenseStore;
 }
 //Include All store below
 export const store: Store = {
@@ -102,17 +96,14 @@ export const store: Store = {
 
   //Employee
   EmployeeStore: new EmployeeStore(),
-  EmployeePositionStore: new EmployeePositionStore(),
   ContractDetailsStore: new ContractDetailsStore(),
 
   // User Dashboardstore
   userDashboardStore: new userDashboardStore(),
 
-
   // PMIS
   ProvinceStore: new ProvinceStore(),
   DistrictStore: new DistrictStore(),
-
 
   //ContractType
   ContractTypeStore: new ContractTypeStore(),
@@ -120,14 +111,14 @@ export const store: Store = {
   PositionTitleStore: new PositionTitleStore(),
 
   JobPositionStore: new JobPositionStore(),
-// Foam Company Stores 
-branchStore: new branchStore(),
-uniteOfMeasureStore: new uniteOfMeasureStore(),
-ExpenseTypeStore: new ExpenseTypeStore(),
-investorStore: new investorStore(),
-customerStore: new customerStore(),
-supplierStore: new supplierStore(),
-
+  // Foam Company Stores
+  branchStore: new branchStore(),
+  uniteOfMeasureStore: new uniteOfMeasureStore(),
+  ExpenseTypeStore: new ExpenseTypeStore(),
+  investorStore: new investorStore(),
+  customerStore: new customerStore(),
+  supplierStore: new supplierStore(),
+  ExpenseStore: new ExpenseStore(),
 };
 
 export const StoreContext = createContext(store);

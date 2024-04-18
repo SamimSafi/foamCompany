@@ -23,7 +23,6 @@ import {
 import { IRole, roleDetail, roleParams } from 'src/@types/role';
 import { CreateUser, userParams, userDetail, userLogParams } from 'src/@types/createUser';
 
-
 import { YearInterface, YearParams } from 'src/@types/Year';
 import {
   DashBoardByCurrantDayAndProcessStatus,
@@ -38,10 +37,8 @@ import {
 } from 'src/@types/foamCompanyTypes/Employee';
 import { IEmployeePosition, IEmployeePositionParams } from 'src/@types/EmployeePosition';
 
-
 import { IPositionTitle, IPositionTitleParams } from 'src/@types/foamCompanyTypes/PositionTitle';
 import { IJobPosition, IJobPositionParams } from 'src/@types/JobPosition';
-
 
 import { ICountry } from 'src/@types/country';
 
@@ -49,14 +46,18 @@ import { UserReport } from 'src/@types/userReport';
 import { Province, ProvinceParams } from 'src/@types/province';
 import { District, DistrictParams } from 'src/@types/district';
 import { IContractType, IContractTypeParams } from 'src/@types/foamCompanyTypes/ContractType';
-import { IContractDetails, IContractDetailsParams } from 'src/@types/foamCompanyTypes/ContractDetails';
+import {
+  IContractDetails,
+  IContractDetailsParams,
+} from 'src/@types/foamCompanyTypes/ContractDetails';
 import { IBranch, IBranchParams } from 'src/@types/foamCompanyTypes/branch';
 import { IUnitOfMeasure, IUnitOfMeasureParams } from 'src/@types/foamCompanyTypes/unitOfMeasure';
 import { IExpenseType, IExpenseTypeParams } from 'src/@types/foamCompanyTypes/expenseType';
 import { ICustomer, ICustomerParams } from 'src/@types/foamCompanyTypes/customer';
 import { ISupplier, ISupplierParams } from 'src/@types/foamCompanyTypes/Supplier';
+import { IExpense, IExpenseParams } from 'src/@types/foamCompanyTypes/Expense';
 
- //axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+//axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = 'http://localhost:7073/api/';
 
 axios.interceptors.request.use(
@@ -155,28 +156,33 @@ const Lanugages = {
   delete: (id: number, remark: string) => axios.delete<void>(`/Language/${id}`, { data: remark }),
 };
 
-
-
 // Employee
 const Employees = {
   create: (data: IEmployee, file: Blob) => {
     let formData = new FormData();
-   
-    formData.append('name', data.name!);
-    formData.append('fatherName', data.fatherName!);
+
+    formData.append('englishFirstName', data.englishFirstName!);
+    formData.append('pashtoFirstName', data.pashtoFirstName!);
+    formData.append('englishSurName', data.englishSurName!);
+    formData.append('pashtoSurName', data.pashtoSurName!);
+    formData.append('englishFatherName', data.englishFatherName!);
+    formData.append('pashtoFatherName', data.pashtoFatherName!);
+    formData.append('englishGrandFatherName', data.englishGrandFatherName!);
+    formData.append('pashtoGrandFatherName', data.pashtoGrandFatherName!);
     formData.append('tazkiraNo', data.tazkiraNo!);
-    formData.append('dateOfBirth', data.dateOfBirth!.toDateString());
     formData.append('provinceId', data.provinceId!.toString());
     formData.append('districtId', data.districtId!.toString());
     formData.append('branchId', data.branchId!.toString());
     formData.append('gender', data.gender!.toString());
-    formData.append('age', data.age!);
+    // formData.append('age', data.age!);
     formData.append('isInvestor', data.isInvestor!.toString());
     formData.append('tazkiraTypeId', data.tazkiraTypeId!.toString());
     formData.append('joldNo', data.joldNo!);
     formData.append('pageNo', data.pageNo!);
     formData.append('regNo', data.regNo!);
     formData.append('phoneNumber', data.phoneNumber!);
+    formData.append('emergencyPhoneNumber', data.emergencyPhoneNumber!);
+    formData.append('isCurrent', data.isCurrent!.toString());
     formData.append('profilePhoto', file);
     return axios.post<IEmployee, any>('/EmployeeProfile', formData, {
       headers: { 'Content-type': 'multipart/form-data' },
@@ -187,22 +193,29 @@ const Employees = {
     axios.post<any>(`/EmployeeProfile/GetList`, param, { withCredentials: true }),
   update: (data: IEmployee, file: Blob) => {
     let formData = new FormData();
-    
-    formData.append('name', data.name!);
-    formData.append('fatherName', data.fatherName!);
+
+    formData.append('englishFirstName', data.englishFirstName!);
+    formData.append('pashtoFirstName', data.pashtoFirstName!);
+    formData.append('englishSurName', data.englishSurName!);
+    formData.append('pashtoSurName', data.pashtoSurName!);
+    formData.append('englishFatherName', data.englishFatherName!);
+    formData.append('pashtoFatherName', data.pashtoFatherName!);
+    formData.append('englishGrandFatherName', data.englishGrandFatherName!);
+    formData.append('pashtoGrandFatherName', data.pashtoGrandFatherName!);
     formData.append('tazkiraNo', data.tazkiraNo!);
-    formData.append('dateOfBirth', data.dateOfBirth!.toDateString());
     formData.append('provinceId', data.provinceId!.toString());
     formData.append('districtId', data.districtId!.toString());
     formData.append('branchId', data.branchId!.toString());
     formData.append('gender', data.gender!.toString());
-    formData.append('age', data.age!);
+    // formData.append('age', data.age!);
     formData.append('isInvestor', data.isInvestor!.toString());
     formData.append('tazkiraTypeId', data.tazkiraTypeId!.toString());
     formData.append('joldNo', data.joldNo!);
     formData.append('pageNo', data.pageNo!);
     formData.append('regNo', data.regNo!);
     formData.append('phoneNumber', data.phoneNumber!);
+    formData.append('emergencyPhoneNumber', data.emergencyPhoneNumber!);
+    formData.append('isCurrent', data.isCurrent!.toString());
     if (file) {
       formData.append('profilePhoto', file);
     }
@@ -249,7 +262,6 @@ const province = {
       withCredentials: true,
     }),
 };
-
 
 // District
 const district = {
@@ -364,7 +376,6 @@ const Years = {
     }),
 };
 
-
 const changeLanguage = {
   ChangeLanguage: (language: any) =>
     axios.post<any>(`/ChangeLanguage/${language} `, {}, { withCredentials: true }),
@@ -400,7 +411,6 @@ const itsmsDashboard = {
       `ITSMSDashBoardsAndReports/DashBoard-ByCurrantDayVisitorAndProcessStatus/${1}`
     ),
 };
-
 
 // ContractType
 const ContractType = {
@@ -473,22 +483,59 @@ const Branch = {
   create: (Branch: IBranch) => requests.post<void>('/Branch', Branch),
   getList: (param: IBranchParams) =>
     axios.post<any>(`/Branch/GetList`, param, { withCredentials: true }),
-  update: (Branch: IBranch) =>
-    requests.put<void>(`/Branch/${Branch.id}`, Branch),
-  delete: (id: number, remark: string) =>
-    axios.delete<void>(`/Branch/${id}`, { data: remark }),
+  update: (Branch: IBranch) => requests.put<void>(`/Branch/${Branch.id}`, Branch),
+  delete: (id: number, remark: string) => axios.delete<void>(`/Branch/${id}`, { data: remark }),
   DDl: (departmentId: any) =>
     axios.get<any>(`/Branch/GetDropDownList/${departmentId}`, { withCredentials: true }),
 };
 // Customer
 const Customer = {
-  create: (Customer: ICustomer) => requests.post<void>('/Customer', Customer),
+  // create: (Customer: ICustomer) => requests.post<void>('/Customer', Customer),
+  create: (data: ICustomer, file: Blob) => {
+    let formData = new FormData();
+
+    formData.append('englishFirstName', data.englishFirstName!);
+    formData.append('pashtoFirstName', data.pashtoFirstName!);
+    formData.append('englishSurName', data.englishSurName!);
+    formData.append('pashtoSurName', data.pashtoSurName!);
+    formData.append('englishFatherName', data.englishFatherName!);
+    formData.append('pashtoFatherName', data.pashtoFatherName!);
+    formData.append('englishGrandFatherName', data.englishGrandFatherName!);
+    formData.append('pashtoGrandFatherName', data.pashtoGrandFatherName!);
+    formData.append('phone', data.phone!);
+    formData.append('email', data.email!);
+    formData.append('location', data.location!);
+    formData.append('profilePhoto', file);
+    return axios.post<ICustomer, any>('/Customer', formData, {
+      headers: { 'Content-type': 'multipart/form-data' },
+    });
+  },
   getList: (param: ICustomerParams) =>
     axios.post<any>(`/Customer/GetList`, param, { withCredentials: true }),
-  update: (Customer: ICustomer) =>
-    requests.put<void>(`/Customer/${Customer.id}`, Customer),
-  delete: (id: number, remark: string) =>
-    axios.delete<void>(`/Customer/${id}`, { data: remark }),
+  // update: (Customer: ICustomer) => requests.put<void>(`/Customer/${Customer.id}`, Customer),
+
+  update: (data: ICustomer, file: Blob) => {
+    let formData = new FormData();
+
+    formData.append('englishFirstName', data.englishFirstName!);
+    formData.append('pashtoFirstName', data.pashtoFirstName!);
+    formData.append('englishSurName', data.englishSurName!);
+    formData.append('pashtoSurName', data.pashtoSurName!);
+    formData.append('englishFatherName', data.englishFatherName!);
+    formData.append('pashtoFatherName', data.pashtoFatherName!);
+    formData.append('englishGrandFatherName', data.englishGrandFatherName!);
+    formData.append('pashtoGrandFatherName', data.pashtoGrandFatherName!);
+    formData.append('phone', data.phone!);
+    formData.append('email', data.email!);
+    formData.append('location', data.location!);
+    if (file) {
+      formData.append('profilePhoto', file);
+    }
+    return axios.put<void>(`/Customer/${data.id}`, formData, {
+      headers: { 'Content-type': 'multipart/form-data' },
+    });
+  },
+  delete: (id: number, remark: string) => axios.delete<void>(`/Customer/${id}`, { data: remark }),
   DDl: (departmentId: any) =>
     axios.get<any>(`/Customer/GetDropDownList/${departmentId}`, { withCredentials: true }),
 };
@@ -502,42 +549,90 @@ const UniteOfMeasure = {
   delete: (id: number, remark: string) =>
     axios.delete<void>(`/UniteOfMeasurement/${id}`, { data: remark }),
   DDl: (departmentId: any) =>
-    axios.get<any>(`/UniteOfMeasurement/GetDropDownList/${departmentId}`, { withCredentials: true }),
+    axios.get<any>(`/UniteOfMeasurement/GetDropDownList/${departmentId}`, {
+      withCredentials: true,
+    }),
 };
 // Investor
 const Investor = {
-  create: (expenseType: IInvestor) => requests.post<void>('/Investor', expenseType),
+  create: (investor: IInvestor) => requests.post<void>('/Investor', investor),
   getList: (param: IInvestorParams) =>
-    axios.post<any>(`/IInvestor/GetList`, param, { withCredentials: true }),
+    axios.post<any>(`/Investor/GetList`, param, { withCredentials: true }),
   update: (PositionTitle: IInvestor) =>
-    requests.put<void>(`/IInvestor/${PositionTitle.id}`, PositionTitle),
-  delete: (id: number, remark: string) =>
-    axios.delete<void>(`/IInvestor/${id}`, { data: remark }),
+    requests.put<void>(`/Investor/${PositionTitle.id}`, PositionTitle),
+  delete: (id: number, remark: string) => axios.delete<void>(`/Investor/${id}`, { data: remark }),
   DDl: (departmentId: any) =>
-    axios.get<any>(`/IInvestor/GetDropDownList/${departmentId}`, { withCredentials: true }),
+    axios.get<any>(`/Investor/GetDropDownList/${departmentId}`, { withCredentials: true }),
 };
 //  Expense Type
-const  ExpenseType= {
+const ExpenseType = {
   create: (expenseType: IExpenseType) => requests.post<void>('/ExpenseType', expenseType),
   getList: (param: IExpenseTypeParams) =>
     axios.post<any>(`/ExpenseType/GetList`, param, { withCredentials: true }),
-  update: (PositionTitle: IExpenseType) =>
-    requests.put<void>(`/ExpenseType/${PositionTitle.id}`, PositionTitle),
+  update: (expenseType: IExpenseType) =>
+    requests.put<void>(`/ExpenseType/${expenseType.id}`, expenseType),
   delete: (id: number, remark: string) =>
     axios.delete<void>(`/ExpenseType/${id}`, { data: remark }),
-  DDl: (departmentId: any) =>
-    axios.get<any>(`/ExpenseType/GetDropDownList/${departmentId}`, { withCredentials: true }),
+  DDl: () => axios.get<any>(`/ExpenseType/GetDropDownList`, { withCredentials: true }),
+};
+
+//  Expense
+const Expense = {
+  create: (expense: IExpense) => requests.post<void>('/Expense', expense),
+  getList: (param: IExpenseParams) =>
+    axios.post<any>(`/Expense/GetList`, param, { withCredentials: true }),
+  update: (expense: IExpense) => requests.put<void>(`/Expense/${expense.id}`, expense),
+  delete: (id: number, remark: string) => axios.delete<void>(`/Expense/${id}`, { data: remark }),
+  DDl: () => axios.get<any>(`/Expense/GetDropDownList`, { withCredentials: true }),
 };
 
 // Supplier
 const Supplier = {
-  create: (Supplier: ISupplier) => requests.post<void>('/Supplier', Supplier),
+  // create: (Supplier: ISupplier) => requests.post<void>('/Supplier', Supplier),
+  create: (data: ISupplier, file: Blob) => {
+    let formData = new FormData();
+
+    formData.append('englishFirstName', data.englishFirstName!);
+    formData.append('pashtoFirstName', data.pashtoFirstName!);
+    formData.append('englishSurName', data.englishSurName!);
+    formData.append('pashtoSurName', data.pashtoSurName!);
+    formData.append('englishFatherName', data.englishFatherName!);
+    formData.append('pashtoFatherName', data.pashtoFatherName!);
+    formData.append('englishGrandFatherName', data.englishGrandFatherName!);
+    formData.append('pashtoGrandFatherName', data.pashtoGrandFatherName!);
+    formData.append('phone', data.phone!);
+    formData.append('email', data.email!);
+    formData.append('location', data.location!);
+    formData.append('profilePhoto', file);
+    return axios.post<ISupplier, any>('/Supplier', formData, {
+      headers: { 'Content-type': 'multipart/form-data' },
+    });
+  },
   getList: (param: ISupplierParams) =>
     axios.post<any>(`/Supplier/GetList`, param, { withCredentials: true }),
-  update: (Supplier: ISupplier) =>
-    requests.put<void>(`/Supplier/${Supplier.id}`, Supplier),
-  delete: (id: number, remark: string) =>
-    axios.delete<void>(`/Supplier/${id}`, { data: remark }),
+  // update: (Supplier: ISupplier) => requests.put<void>(`/Supplier/${Supplier.id}`, Supplier),
+  update: (data: ISupplier, file: Blob) => {
+    let formData = new FormData();
+
+    formData.append('englishFirstName', data.englishFirstName!);
+    formData.append('pashtoFirstName', data.pashtoFirstName!);
+    formData.append('englishSurName', data.englishSurName!);
+    formData.append('pashtoSurName', data.pashtoSurName!);
+    formData.append('englishFatherName', data.englishFatherName!);
+    formData.append('pashtoFatherName', data.pashtoFatherName!);
+    formData.append('englishGrandFatherName', data.englishGrandFatherName!);
+    formData.append('pashtoGrandFatherName', data.pashtoGrandFatherName!);
+    formData.append('phone', data.phone!);
+    formData.append('email', data.email!);
+    formData.append('location', data.location!);
+    if (file) {
+      formData.append('profilePhoto', file);
+    }
+    return axios.put<void>(`/Supplier/${data.id}`, formData, {
+      headers: { 'Content-type': 'multipart/form-data' },
+    });
+  },
+  delete: (id: number, remark: string) => axios.delete<void>(`/Supplier/${id}`, { data: remark }),
   DDl: (departmentId: any) =>
     axios.get<any>(`/Supplier/GetDropDownList/${departmentId}`, { withCredentials: true }),
 };
@@ -568,7 +663,8 @@ const agent = {
   ExpenseType,
   Investor,
   Customer,
-  Supplier
+  Supplier,
+  Expense,
 };
 
 export default agent;

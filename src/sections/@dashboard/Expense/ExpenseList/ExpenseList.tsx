@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import useLocales from 'src/hooks/useLocales';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-// @mui
 import {
   Box,
   Card,
@@ -14,49 +13,41 @@ import {
   TablePagination,
   FormControlLabel,
 } from '@mui/material';
-// routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-// hooks
 import useSettings from '../../../../hooks/useSettings';
-
 import useTable, { getComparator, emptyRows } from '../../../../hooks/useTable';
-
-// components
 import Page from '../../../../components/Page';
 import Iconify from '../../../../components/Iconify';
 import Scrollbar from '../../../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../../../components/HeaderBreadcrumbs';
 import { TableNoData, TableEmptyRows, TableHeadCustom } from '../../../../components/table';
-// sections
-import { ProcessStatusTableToolbar } from '.';
-import { ProcessStatusTableRow } from '.';
 import { useSnackbar } from 'notistack';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../stores/store';
 import MyDialog from 'src/components/MyDialog';
-import StatusDelete from './EmployeePositionDelete';
-import EmployeePositionDelete from './EmployeePositionDelete';
-import EmployeePositionTableRow from './EmployeePositionTableRow';
-import EmployeePositionTableToolbar from './EmployeePositionTableToolbar';
-import { IEmployeePosition } from 'src/@types/EmployeePosition';
-import PermissionBasedGuard from 'src/guards/PermissionBasedGuard';
+import { IUnitOfMeasure } from 'src/@types/foamCompanyTypes/unitOfMeasure';
+import MeasurementTableToolbar from './ExpenseTableToolbar';
+import { ContractTypeTableRow } from '../../ContractType/ContractTypeList';
+import MeasurementDelete from './ExpenseDelete';
+import { IExpense } from 'src/@types/foamCompanyTypes/Expense';
+import ExpenseTableRow from './ExpenseTableRow';
+import ExpenseDelete from './ExpenseDelete';
 
 // ----------------------------------------------------------------------
 
-export default observer(function ProcessStatusList() {
-  const { EmployeePositionStore } = useStore();
+export default observer(function ExpenseList() {
+  const { ExpenseStore } = useStore();
   const { translate } = useLocales();
   const {
-    loadEmployeePosition,
-    EmployeePositionList,
-    EmployeePositionRegistry,
+    loadExpense,
+    ExpenseList,
+    ExpenseRegistry,
     totalRecord,
-    EmployeePositionSearch,
-    deleteEmployeePosition,
-    getEmployeePositionFromRegistry,
+    Expenseearch,
+    getExpenseFromRegistry,
     setOpenCloseDialog,
     openDialog,
-  } = EmployeePositionStore;
+  } = ExpenseStore;
   const {
     dense,
     page,
@@ -71,55 +62,54 @@ export default observer(function ProcessStatusList() {
 
   const { themeStretch } = useSettings();
 
-  const [filterName, setFilterName] = useState('');
+  const [filterName, setFilterName] = useState(''); //State For Search
 
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const [EmployeePositionId, setEmployeePositionId] = useState<number>(0);
+  const [ContractTypeId, setContractTypeId] = useState<number>(0);
   const TABLE_HEAD = [
-    { id: 'ID', label: `${translate('Employee.Id')}`, align: 'left' },
-    { id: 'englishName', label: `${translate('Employee.EnglishName')}`, align: 'left' },
-    { id: 'pashtoName', label: `${translate('Employee.PashtoName')}`, align: 'left' },
-    { id: 'dariName', label: `${translate('Employee.DariName')}`, align: 'left' },
-    { id: 'code', label: `${translate('Department.DocCode')}`, align: 'left' },
-    { id: '', label: `${translate('Department.Action')}` },
+    { id: 'ID', label: `${translate('GeneralFields.Id')}`, align: 'left' },
+    { id: 'ExpenseType', label: `${translate('Expense.ExpenseType')}`, align: 'left' },
+    { id: 'Amount', label: `${translate('Expense.Amount')}`, align: 'left' },
+    { id: 'description', label: `${translate('GeneralFields.description')}`, align: 'left' },
+    { id: '', label: `${translate('GeneralFields.Action')}` },
   ];
   const handleFilterName = (filterName: string) => {
     setFilterName(filterName);
     setPage(0);
     if (filterName.length > 1) {
-      EmployeePositionSearch({
+      Expenseearch({
         pageIndex: 0,
         pageSize: rowsPerPage,
-        name: filterName,
+        search: filterName,
         //dariName: filterName,
       });
     } else if (filterName === '') {
-      EmployeePositionSearch({ pageIndex: 0, pageSize: rowsPerPage });
+      Expenseearch({ pageIndex: 0, pageSize: rowsPerPage });
     }
   };
 
   const handleOpenConfirm = (id: number) => {
     setOpenCloseDialog();
-    setEmployeePositionId(id);
+    setContractTypeId(id);
   };
 
   const handleCloseConfirm = () => {
     setOpenCloseDialog();
   };
   const handleEditRow = (id: number) => {
-    getEmployeePositionFromRegistry(id);
-    navigate(PATH_DASHBOARD.EmployeePositions.edit);
+    getExpenseFromRegistry(id);
+    navigate(PATH_DASHBOARD.ContractType.edit);
   };
 
   // const handleDelete = () => {
-  //   deleteEmployeePosition(EmployeePositionId)
+  //   deleteConstructionType(ConstructionTypeId)
   //     .then(() => {
   //       setOpenConfirm(false);
   //       enqueueSnackbar('Delete  success!');
-  //       setEmployeePositionId(0);
+  //       setConstructionTypeId(0);
   //     })
   //     .catch((error) => {
   //       console.log(error);
@@ -127,27 +117,27 @@ export default observer(function ProcessStatusList() {
   //         variant: 'error',
   //       });
   //       setOpenConfirm(false);
-  //       setEmployeePositionId(0);
+  //       setConstructionTypeId(0);
   //     });
   // };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-    loadEmployeePosition({ pageIndex: newPage, pageSize: rowsPerPage });
+    loadExpense({ pageIndex: newPage, pageSize: rowsPerPage });
   };
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeRowsPerPage(event);
     let pageZize = parseInt(event.target.value);
-    loadEmployeePosition({ pageIndex: 0, pageSize: pageZize });
+    loadExpense({ pageIndex: 0, pageSize: pageZize });
   };
   useEffect(() => {
-    if (EmployeePositionRegistry.size <= 1) {
-      loadEmployeePosition({ pageIndex: 0, pageSize: rowsPerPage });
+    if (ExpenseRegistry.size <= 1) {
+      loadExpense({ pageIndex: 0, pageSize: rowsPerPage });
     }
   }, []);
 
   const dataFiltered = applySortFilter({
-    tableData: EmployeePositionList,
+    tableData: ExpenseList,
     comparator: getComparator(order, orderBy),
     filterName: '',
   });
@@ -157,33 +147,29 @@ export default observer(function ProcessStatusList() {
   const isNotFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Page title={translate('EmployeePosition.Title')}>
+    <Page title={translate('Expense.Title')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={translate('EmployeePosition.EmployeePositionList')}
+          heading={translate('Expense.ExpenseList')}
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
 
-            { name: `${translate('EmployeePosition.EmployeePositionList')}` },
+            { name: `${translate('Expense.ExpenseList')}` },
           ]}
           action={
-            <>
-              <PermissionBasedGuard permissions={['EmployeePosition-Create']}>
-                <Button
-                  variant="contained"
-                  startIcon={<Iconify icon="eva:plus-fill" />}
-                  component={RouterLink}
-                  to={PATH_DASHBOARD.EmployeePositions.new}
-                >
-                  {translate('CRUD.Create')}
-                </Button>
-              </PermissionBasedGuard>
-            </>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              component={RouterLink}
+              to={PATH_DASHBOARD.Expense.new}
+            >
+              {translate('CRUD.Create')}
+            </Button>
           }
         />
 
         <Card>
-          <EmployeePositionTableToolbar filterName={filterName} onFilterName={handleFilterName} />
+          <MeasurementTableToolbar filterName={filterName} onFilterName={handleFilterName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 960, position: 'relative' }}>
@@ -199,10 +185,11 @@ export default observer(function ProcessStatusList() {
                 <TableBody>
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <EmployeePositionTableRow
+                    .map((row, index) => (
+                      <ExpenseTableRow
                         key={row.id}
                         row={row}
+                        index={index}
                         onDeleteRow={() => handleOpenConfirm(row.id!)}
                         onEditRow={() => handleEditRow(row.id!)}
                       />
@@ -221,7 +208,7 @@ export default observer(function ProcessStatusList() {
 
           <Box sx={{ position: 'relative' }}>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, 50, 100, 150, 200]}
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
               labelRowsPerPage={translate('Pagination.RowsPerPage')}
               count={totalRecord}
@@ -239,7 +226,7 @@ export default observer(function ProcessStatusList() {
               title={translate('CRUD.DeleteTitle')}
               size="md"
             >
-              <EmployeePositionDelete id={EmployeePositionId} />
+              <ExpenseDelete id={ContractTypeId} />
             </MyDialog>
             <FormControlLabel
               control={<Switch checked={dense} onChange={onChangeDense} />}
@@ -260,7 +247,7 @@ function applySortFilter({
   comparator,
   filterName,
 }: {
-  tableData: IEmployeePosition[];
+  tableData: IExpense[];
   comparator: (a: any, b: any) => number;
   filterName: string;
 }) {
@@ -277,7 +264,7 @@ function applySortFilter({
   if (filterName) {
     tableData = tableData.filter(
       (item: Record<string, any>) =>
-        item.searchBy.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        item.search.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 

@@ -67,10 +67,8 @@ export default observer(function EmployeeNewEditForm() {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [croppedImage, setCroppedImage] = useState<string>('');
 
-
   const [provinceName, setProvinceName] = useState<string | undefined>('');
   const [districtName, setDistrictName] = useState<string | undefined>('');
-
 
   const {
     createEmployee,
@@ -80,12 +78,8 @@ export default observer(function EmployeeNewEditForm() {
     clearSelectedEmployee,
     employeeForEdit,
   } = EmployeeStore;
-  const {
-    loadProvinceDropdown,
-    loadDistrictDropdown,
-    ProvinceOption,
-    DistrictOption,
-  } = commonDropdown;
+  const { loadProvinceDropdown, loadDistrictDropdown, ProvinceOption, DistrictOption } =
+    commonDropdown;
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -93,9 +87,8 @@ export default observer(function EmployeeNewEditForm() {
   // const phoneRegExp =
   //   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
   const NewEmployeeSchema = Yup.object().shape({
-    registrationNumber: Yup.string().required(`${translate('Validation.RegistrationNumber')}`),
-    englishFirstName: Yup.string().required(`${translate('Validation.EnglishName')}`),
-    pashtoFirstName: Yup.string().required(`${translate('Validation.PashtoName')}`),
+    englishFirstName: Yup.string().required(`${translate('Validation.RegistrationNumber')}`),
+    pashtoFirstName: Yup.string().required(`${translate('Validation.EnglishName')}`),
     englishSurName: Yup.string().required(`${translate('Validation.EnglishSurName')}`),
     pashtoSurName: Yup.string().required(`${translate('Validation.PashtoSurName')}`),
     englishFatherName: Yup.string().required(
@@ -105,19 +98,19 @@ export default observer(function EmployeeNewEditForm() {
     englishGrandFatherName: Yup.string().required(`${translate('Validation.GrandFatherEnglish')}`),
     pashtoGrandFatherName: Yup.string().required(`${translate('Validation.GrandFatherPashto')}`),
     tazkiraNo: Yup.string().required(`${translate('Validation.CNIC')}`),
-    dateOfBirth: Yup.date().required(`${translate('Validation.DateOfBirth')}`),
-    temporaryAddress: Yup.string().required(`${translate('Validation.TemporaryAddress')}`),
-    permenantAddress: Yup.string().required(`${translate('Validation.PermanentAddress')}`),
-    attendanceId: Yup.number().required(`${translate('Validation.AttendanceId')}`),
+    // dateOfBirth: Yup.date().required(`${translate('Validation.DateOfBirth')}`),
+    // temporaryAddress: Yup.string().required(`${translate('Validation.TemporaryAddress')}`),
+    // permenantAddress: Yup.string().required(`${translate('Validation.PermanentAddress')}`),
+    // attendanceId: Yup.number().required(`${translate('Validation.AttendanceId')}`),
     provinceName: Yup.string().required(`${translate('Validation.Province')}`),
     districtName: Yup.string().required(`${translate('Validation.District')}`),
-    healthStatusName: Yup.string().required(`${translate('Validation.EmployeeHealthStatus')}`),
-    departmentName: !editMode
-      ? Yup.string().required(`${translate('Validation.Directorate')}`)
-      : Yup.string(),
-      genderId: Yup.string().required(`${translate('Validation.Gender')}`),
+    // healthStatusName: Yup.string().required(`${translate('Validation.EmployeeHealthStatus')}`),
+    // departmentName: !editMode
+    //   ? Yup.string().required(`${translate('Validation.Directorate')}`)
+    //   : Yup.string(),
+    gender: Yup.string().required(`${translate('Validation.Gender')}`),
     // bloodGroup: Yup.string().required(`${translate('Validation.BloodGroup')}`),
-    joinDate: Yup.date().required(`${translate('Validation.JoinDate')}`),
+    // joinDate: Yup.date().required(`${translate('Validation.JoinDate')}`),
     // personalEmail: Yup.string()
     //   .email()
     //   .required(`${translate('Validation.PersonalEmail')}`),
@@ -154,16 +147,23 @@ export default observer(function EmployeeNewEditForm() {
       pageNo: employeeForEdit?.pageNo || '',
       regNo: employeeForEdit?.regNo || '',
       tazkiraNo: employeeForEdit?.tazkiraNo || '',
-      dateOfBirth: employeeForEdit?.dateOfBirth || new Date(),
+      // dateOfBirth: employeeForEdit?.dateOfBirth || new Date(),
       provinceId: employeeForEdit?.provinceId || 1,
       districtId: employeeForEdit?.districtId || undefined,
       phoneNumber: employeeForEdit?.phoneNumber || '',
+      emergencyPhoneNumber: employeeForEdit?.emergencyPhoneNumber || '',
       photoPath: employeeForEdit?.photoPath || undefined,
       profilePhoto: employeeForEdit?.profilePhoto || null,
       gender: employeeForEdit?.gender || '',
-      name: employeeForEdit?.name || '',
-      fatherName: employeeForEdit?.fatherName || '',
-      age: employeeForEdit?.age || '',
+      englishFirstName: employeeForEdit?.englishFirstName || '',
+      pashtoFirstName: employeeForEdit?.pashtoFirstName || '',
+      englishSurName: employeeForEdit?.englishSurName || '',
+      pashtoSurName: employeeForEdit?.pashtoSurName || '',
+      englishFatherName: employeeForEdit?.englishFatherName || '',
+      pashtoFatherName: employeeForEdit?.pashtoFatherName || '',
+      englishGrandFatherName: employeeForEdit?.englishGrandFatherName || '',
+      pashtoGrandFatherName: employeeForEdit?.pashtoGrandFatherName || '',
+      // age: employeeForEdit?.age || '',
       isInvestor: employeeForEdit?.isInvestor || true,
     }),
     [employeeForEdit]
@@ -256,8 +256,6 @@ export default observer(function EmployeeNewEditForm() {
     }
   };
 
-
-
   useEffect(() => {
     if (editMode) {
       reset(defaultValues);
@@ -286,8 +284,6 @@ export default observer(function EmployeeNewEditForm() {
     }
   }, [provinceName]);
 
-
-
   useEffect(() => {
     if (editMode) {
       if (defaultValues.provinceId) {
@@ -298,8 +294,6 @@ export default observer(function EmployeeNewEditForm() {
     }
   }, [districtName]);
 
-
-
   useEffect(() => {
     setValue('provinceName', provinceName);
   }, [provinceName]);
@@ -307,7 +301,6 @@ export default observer(function EmployeeNewEditForm() {
   useEffect(() => {
     setValue('districtName', districtName);
   }, [districtName]);
-
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -455,17 +448,52 @@ export default observer(function EmployeeNewEditForm() {
                 }}
               >
                 <RHFTextField
-                  name="name"
+                  name="englishFirstName"
                   label={translate('Employee.EnglishName')}
                   showAsterisk={true}
                   autoFocus
                 />
                 <RHFTextField
-                  name="fatherName"
+                  name="pashtoFirstName"
+                  label={translate('Employee.PashtoName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishSurName"
                   label={translate('Employee.englishSurName')}
                   showAsterisk={true}
+                  autoFocus
                 />
-                </Box>
+                <RHFTextField
+                  name="pashtoSurName"
+                  label={translate('Employee.pashtoSurName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishFatherName"
+                  label={translate('Employee.FatherEnglishName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="pashtoFatherName"
+                  label={translate('Employee.FatherDariName')}
+                  showAsterisk={true}
+                  autoFocus
+                />
+                <RHFTextField
+                  name="englishGrandFatherName"
+                  label={translate('Employee.englishGrandFatherName')}
+                  showAsterisk={true}
+                />
+                <RHFTextField
+                  name="pashtoGrandFatherName"
+                  label={translate('Employee.pashtoGrandFatherName')}
+                  showAsterisk={true}
+                />
+              </Box>
             </Fieldset>
 
             <Fieldset legend={translate('Employee.EmployeeGeneralInfo')}>
@@ -477,13 +505,6 @@ export default observer(function EmployeeNewEditForm() {
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
                 }}
               >
-                <LocalizDatePicker
-                  name="dateOfBirth"
-                  label={translate('Employee.dateOfBirth')}
-                  control={control}
-                  showAsterisk={true}
-                />
-         
                 <RHFTextField
                   name="gender"
                   label={translate('Employee.Gender')}
@@ -497,7 +518,13 @@ export default observer(function EmployeeNewEditForm() {
                   name="phoneNumber"
                   customFlag={CustomFlag}
                 />
-
+                <MuiPhone
+                  value={muiPhone}
+                  dir={language === 'en' ? 'ltr' : 'ltr'}
+                  onChange={(Phone) => setMuiPhone(Phone)}
+                  name="emergencyPhoneNumber"
+                  customFlag={CustomFlag}
+                />
 
                 <RHFSelect name="branchId" label={translate('Employee.Branch')}>
                   <option value="" />

@@ -45,29 +45,28 @@ import EmployeeTableToolbar from './CustomerTableToolbar';
 import PermissionBasedGuard from 'src/guards/PermissionBasedGuard';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import EmployeeDetails from '../../employeeAttendance/EmployeeDetails';
+import { ICustomer } from 'src/@types/foamCompanyTypes/customer';
+import CustomerTableRow from './CustomerTableRow';
 
 // ----------------------------------------------------------------------
 
 export default observer(function CustomerList() {
-  const { EmployeeStore, ContractDetailsStore } =
-    useStore();
+  const { customerStore, ContractDetailsStore } = useStore();
   const { translate } = useLocales();
   const {
-    loadEmployee,
-    EmployeeList,
-    EmployeeRegistry,
+    loadCustomer,
+    CustomerList,
+    CustomerRegistry,
     totalRecord,
-    EmployeeSearch,
-    deleteEmployee,
-    getEmployeeFromRegistry,
+    Customerearch,
+    getCustomerFromRegistry,
     setOpenCloseDialog,
     openDialog,
-    getEmpForEdit,
-    clearSelectedEmployee,
-    loadEmployeeDetail,
-    selectedEmployee,
-  } = EmployeeStore;
-  const { loadContractDetails, getEmpCurrentContract,ContractDetailsRegistry } = ContractDetailsStore;
+    clearSelectedCustomer,
+    selectedCustomer,
+  } = customerStore;
+  const { loadContractDetails, getEmpCurrentContract, ContractDetailsRegistry } =
+    ContractDetailsStore;
 
   const {
     dense,
@@ -93,9 +92,10 @@ export default observer(function CustomerList() {
   const TABLE_HEAD = [
     { id: 'ID', label: `${translate('Employee.Id')}`, align: 'left' },
     { id: 'fullName', label: `${translate('Employee.Name')}`, align: 'left' },
-    { id: 'departmentName', label: `${translate('Employee.Department')}`, align: 'left' },
-    { id: 'personalEmail', label: `${translate('Employee.Email')}`, align: 'left' },
-    { id: 'phoneNumber', label: `${translate('Employee.PhoneNumber')}`, align: 'left' },
+    { id: 'sureName', label: `${translate('Employee.surName')}`, align: 'left' },
+    { id: 'email', label: `${translate('Employee.Email')}`, align: 'left' },
+    { id: 'phone', label: `${translate('Employee.PhoneNumber')}`, align: 'left' },
+    { id: 'location', label: `${translate('Employee.Location')}`, align: 'left' },
 
     { id: '', label: `${translate('Department.Action')}` },
   ];
@@ -103,14 +103,14 @@ export default observer(function CustomerList() {
     setFilterName(filterName);
     setPage(0);
     if (filterName.length > 1) {
-      EmployeeSearch({
+      Customerearch({
         pageIndex: 0,
         pageSize: rowsPerPage,
-        searchBy: filterName,
+        search: filterName,
         //dariName: filterName,
       });
     } else if (filterName === '') {
-      EmployeeSearch({ pageIndex: 0, pageSize: rowsPerPage });
+      Customerearch({ pageIndex: 0, pageSize: rowsPerPage });
     }
   };
 
@@ -123,21 +123,19 @@ export default observer(function CustomerList() {
     setOpenCloseDialog();
   };
   const handleEditRow = (id: number) => {
-    getEmpForEdit(id).then((res) => {
-      navigate(PATH_DASHBOARD.Employee.edit);
-    });
+    navigate(PATH_DASHBOARD.Customer.edit);
   };
 
   const handleCreateUser = (id: number) => {
-    getEmployeeFromRegistry(id);
+    getCustomerFromRegistry(id);
 
     navigate(PATH_DASHBOARD.user.new);
   };
 
   const handleDetail = (id: number) => {
-    loadEmployeeDetail(id).then(() => {
-      navigate(PATH_DASHBOARD.Employee.detail);
-    });
+    // loadCustomerDetail(id).then(() => {
+    //   navigate(PATH_DASHBOARD.Employee.detail);
+    // });
   };
 
   const StoreIDToLocalStorage = (id: any, storeName: any) => {
@@ -151,7 +149,7 @@ export default observer(function CustomerList() {
   const handleCardDetails = (id: number) => {
     if (id) {
       // StoreIDToLocalStorage(id, CardDetailsStore);
-      getEmployeeFromRegistry(id);
+      getCustomerFromRegistry(id);
       navigate(PATH_DASHBOARD.ContractDetails.list);
     }
   };
@@ -160,7 +158,7 @@ export default observer(function CustomerList() {
     ContractDetailsRegistry.clear();
     if (id) {
       //StoreIDToLocalStorage(id, ContractDetailsStore);
-      getEmployeeFromRegistry(id);
+      getCustomerFromRegistry(id);
       getEmpCurrentContract(id);
       loadContractDetails({ pageIndex: 0, pageSize: rowsPerPage }, id);
       navigate(PATH_DASHBOARD.ContractDetails.list);
@@ -169,35 +167,35 @@ export default observer(function CustomerList() {
 
   // Employee Detail
   const employeeDetails = (id: number) => {
-    loadEmployeeDetail(id).then(() => {
-      navigate(PATH_DASHBOARD.Employee.detail);
-    });
+    // loadCustomerDetail(id).then(() => {
+    //   navigate(PATH_DASHBOARD.Employee.detail);
+    // });
   };
 
   const handleEducationalLevelDetails = (id: any) => {
-    getEmployeeFromRegistry(id);
+    getCustomerFromRegistry(id);
     navigate(PATH_DASHBOARD.ContractDetails.list);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-    loadEmployee({ pageIndex: newPage, pageSize: rowsPerPage });
+    loadCustomer({ pageIndex: newPage, pageSize: rowsPerPage });
   };
 
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeRowsPerPage(event);
     let pageZize = parseInt(event.target.value);
-    loadEmployee({ pageIndex: 0, pageSize: pageZize });
+    loadCustomer({ pageIndex: 0, pageSize: pageZize });
   };
 
   useEffect(() => {
-    if (EmployeeRegistry.length <= 1) {
-      loadEmployee({ pageIndex: 0, pageSize: rowsPerPage });
+    if (CustomerRegistry.size <= 1) {
+      loadCustomer({ pageIndex: 0, pageSize: rowsPerPage });
     }
   }, []);
 
   const dataFiltered = applySortFilter({
-    tableData: EmployeeList,
+    tableData: CustomerList,
     comparator: getComparator(order, orderBy),
     filterName: '',
   });
@@ -210,20 +208,20 @@ export default observer(function CustomerList() {
     <Page title={translate('Employee.Title')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={translate('Employee.EmployeeList')}
+          heading={translate('Employee.CustomerList')}
           links={[
             { name: `${translate('Department.Dashboard')}`, href: PATH_DASHBOARD.root },
 
-            { name: `${translate('Employee.EmployeeList')}` },
+            { name: `${translate('Employee.CustomerList')}` },
           ]}
           action={
             <>
-              <PermissionBasedGuard permissions={['Employee-Create']}>
+              <PermissionBasedGuard permissions={['Customer-Create']}>
                 <Button
                   variant="contained"
                   startIcon={<Iconify icon="eva:plus-fill" />}
                   component={RouterLink}
-                  to={PATH_DASHBOARD.Employee.new}
+                  to={PATH_DASHBOARD.Customer.new}
                 >
                   {translate('CRUD.Create')}
                 </Button>
@@ -250,7 +248,7 @@ export default observer(function CustomerList() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <EmployeeTableRow
+                      <CustomerTableRow
                         key={row.id}
                         index={index}
                         row={row}
@@ -321,7 +319,7 @@ function applySortFilter({
   comparator,
   filterName,
 }: {
-  tableData: IEmployee[];
+  tableData: ICustomer[];
   comparator: (a: any, b: any) => number;
   filterName: string;
 }) {
@@ -338,7 +336,7 @@ function applySortFilter({
   if (filterName) {
     tableData = tableData.filter(
       (item: Record<string, any>) =>
-        item.searchBy.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        item.search.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 

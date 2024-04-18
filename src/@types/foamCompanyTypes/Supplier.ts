@@ -1,12 +1,21 @@
 export interface ISupplier {
   id?: number;
   name?: string;
-  fatherName?: string;
+  surName?: string;
+  englishFirstName?: string;
+  pashtoFirstName?: string;
+  englishSurName?: string;
+  pashtoSurName?: string;
+  englishFatherName?: string;
+  pashtoFatherName?: string;
+  englishGrandFatherName?: string;
+  pashtoGrandFatherName?: string;
   phone?: string;
   email?: string;
   branchId?: number;
   location?: string;
-  afterSubmit?:string;
+  profilePhoto?: File | any;
+  afterSubmit?: string;
 }
 
 export interface ISupplierParams {

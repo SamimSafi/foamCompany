@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, Grid, Stack } from '@mui/material';
+import { Alert, Box, Button, Card, Grid, Stack } from '@mui/material';
 
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -36,13 +36,18 @@ export default observer(function ContractTypeNewEditForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewContractTypeSchema = Yup.object().shape({
-    name: Yup.string().required(`${translate('Validation.EnglishName')}`),
+    englishName: Yup.string().required(`${translate('Validation.EnglishName')}`),
+    pashtoName: Yup.string().required(`${translate('Validation.PashtoName')}`),
+    dariName: Yup.string().required(`${translate('Validation.DariName')}`),
   });
 
   const defaultValues = useMemo<IContractType>(
     () => ({
       id: selectedContractType?.id,
-      name: selectedContractType?.name || '',
+      englishName: selectedContractType?.englishName || '',
+      pashtoName: selectedContractType?.pashtoName || '',
+      dariName: selectedContractType?.dariName || '',
+      code: selectedContractType?.code || '',
     }),
     [selectedContractType]
   );
@@ -55,17 +60,29 @@ export default observer(function ContractTypeNewEditForm() {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
+    setError,
+    formState: { isSubmitting, errors },
   } = methods;
 
   const onSubmit = (data: IContractType) => {
     if (data.id! === undefined) {
       ///create
-      createContractType(data).then(() => {
-        reset();
-        enqueueSnackbar(`${translate('Tostar.CreateSuccess')}`);
-        navigate(PATH_DASHBOARD.ContractType.list);
-      });
+      createContractType(data)
+        .then(() => {
+          reset();
+          enqueueSnackbar(`${translate('Tostar.CreateSuccess')}`);
+          navigate(PATH_DASHBOARD.ContractType.list);
+        })
+        .catch((err) => {
+          var json = JSON.parse(err.request.response);
+          if (json.error.EnglishName != null) {
+            setError('afterSubmit', { ...err, message: json.error.EnglishName });
+          } else if (json.error.PashtoName != null) {
+            setError('afterSubmit', { ...err, message: json.error.PashtoName });
+          } else if (json.error.DariName != null) {
+            setError('afterSubmit', { ...err, message: json.error.DariName });
+          }
+        });
     } else {
       ///update
       updateContractType(data).then(() => {
@@ -87,6 +104,11 @@ export default observer(function ContractTypeNewEditForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      {!!errors.afterSubmit && (
+        <Alert sx={{ mb: 2 }} severity="error">
+          {errors.afterSubmit.message}
+        </Alert>
+      )}
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
@@ -99,8 +121,26 @@ export default observer(function ContractTypeNewEditForm() {
               }}
             >
               <RHFTextField
-                name="name"
+                name="englishName"
                 label={translate('GeneralFields.EnglishName')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <RHFTextField
+                name="pashtoName"
+                label={translate('GeneralFields.PashtoName')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <RHFTextField
+                name="dariName"
+                label={translate('GeneralFields.DariName')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <RHFTextField
+                name="code"
+                label={translate('GeneralFields.Code')}
                 showAsterisk={true}
                 autoFocus
               />

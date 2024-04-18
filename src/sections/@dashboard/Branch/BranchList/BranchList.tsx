@@ -29,6 +29,7 @@ import ContractTypeTableToolbar from './BranchTableToolbar';
 import ContractTypeTableRow from './BranchTableRow';
 import { IContractType } from 'src/@types/foamCompanyTypes/ContractType';
 import ContractTypeDelete from './BranchDelete';
+import { IBranch } from 'src/@types/foamCompanyTypes/branch';
 
 // ----------------------------------------------------------------------
 
@@ -245,7 +246,7 @@ function applySortFilter({
   comparator,
   filterName,
 }: {
-  tableData: IContractType[];
+  tableData: IBranch[];
   comparator: (a: any, b: any) => number;
   filterName: string;
 }) {

@@ -1,4 +1,4 @@
-import { Box, Card, Dialog, Grid, Stack } from '@mui/material';
+import { Box, Card, Grid, Stack } from '@mui/material';
 import RHFTextField from '../../../../components/hook-form/RHFTextField';
 import { LoadingButton } from '@mui/lab';
 import { FormProvider } from 'src/components/hook-form';
@@ -11,16 +11,19 @@ import { useSnackbar } from 'notistack';
 import useLocales from '../../../../hooks/useLocales';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
+
 interface Props {
   id: number;
 }
 
-export default observer(function EmployeePositionDelete({ id }: Props) {
+export default observer(function ExpenseDelete({ id }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-  const { EmployeePositionStore } = useStore();
+  const { ExpenseStore } = useStore();
   const validationSchema = Yup.object().shape({
-    remarks: Yup.string().required(`${translate('Validation.Remark')}`).label('Remark'),
+    remarks: Yup.string()
+      .required(`${translate('Validation.Remark')}`)
+      .label('Remarks'),
   });
   const methods = useForm<any>({
     resolver: yupResolver(validationSchema),
@@ -33,13 +36,13 @@ export default observer(function EmployeePositionDelete({ id }: Props) {
   } = methods;
 
   const onSubmit = (remark: string) => {
-    EmployeePositionStore.deleteEmployeePosition(id, remark)
+    ExpenseStore.deleteExpense(id, remark)
       .then(() => {
-        enqueueSnackbar(`${translate('Tostar.DeleteSuccess')}`);
+        enqueueSnackbar('Delete  success!');
       })
       .catch((error) => {
         console.log(error);
-        enqueueSnackbar(`${translate('Tostar.DeleteFailed')}`, {
+        enqueueSnackbar('Failed to delete ', {
           variant: 'error',
         });
       });
@@ -77,8 +80,8 @@ export default observer(function EmployeePositionDelete({ id }: Props) {
                 <LoadingButton
                   type="submit"
                   variant="contained"
-                  size="small"
                   color="error"
+                  size="small"
                   loading={isSubmitting}
                   startIcon={<DeleteIcon />}
                 >
@@ -88,7 +91,7 @@ export default observer(function EmployeePositionDelete({ id }: Props) {
                 <LoadingButton
                   variant="contained"
                   size="small"
-                  onClick={() => EmployeePositionStore.setOpenCloseDialog()}
+                  onClick={() => ExpenseStore.setOpenCloseDialog()}
                   startIcon={<CancelIcon />}
                 >
                   {translate('CRUD.Cancle')}

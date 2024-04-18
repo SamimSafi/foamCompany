@@ -37,14 +37,17 @@ export default observer(function ExpenseTypeNewEditForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewContractTypeSchema = Yup.object().shape({
-    name: Yup.string().required(`${translate('Validation.name')}`),
+    englishName: Yup.string().required(`${translate('Validation.EnglishName')}`),
+    dariName: Yup.string().required(`${translate('Validation.PashtoName')}`),
+    pashtoName: Yup.string().required(`${translate('Validation.DariName')}`),
   });
 
   const defaultValues = useMemo<IExpenseType>(
     () => ({
       id: selectedExpenseType?.id,
-      name: selectedExpenseType?.name || '',
-      description: selectedExpenseType?.description || '',
+      englishName: selectedExpenseType?.englishName || '',
+      dariName: selectedExpenseType?.dariName || '',
+      pashtoName: selectedExpenseType?.name || '',
     }),
     [selectedExpenseType]
   );
@@ -101,14 +104,20 @@ export default observer(function ExpenseTypeNewEditForm() {
               }}
             >
               <RHFTextField
-                name="name"
-                label={translate('GeneralFields.Name')}
+                name="englishName"
+                label={translate('GeneralFields.EnglishName')}
                 showAsterisk={true}
                 autoFocus
-              />          
+              />
               <RHFTextField
-                name="description"
-                label={translate('Branch.description')}
+                name="pashtoName"
+                label={translate('GeneralFields.PashtoName')}
+                showAsterisk={true}
+                autoFocus
+              />
+              <RHFTextField
+                name="dariName"
+                label={translate('Branch.DariName')}
                 showAsterisk={true}
                 multiline
                 minRows={4}

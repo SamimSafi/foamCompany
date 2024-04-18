@@ -1,11 +1,19 @@
 export interface IEmployee {
   id?: number;
   name?: string;
-  fatherName?: string;
+  surName?: string;
+  englishFirstName?: string;
+  pashtoFirstName?: string;
+  englishSurName?: string;
+  pashtoSurName?: string;
+  englishFatherName?: string;
+  pashtoFatherName?: string;
+  englishGrandFatherName?: string;
+  pashtoGrandFatherName?: string;
   provinceId?: number;
   districtId?: number;
-  provinceName?: string,
-  districtName?: string,
+  provinceName?: string;
+  districtName?: string;
   tazkiraNo?: string;
   tazkiraTypeId?: number;
   joldNo?: string;
@@ -15,8 +23,10 @@ export interface IEmployee {
   age?: string;
   branchId?: number;
   isInvestor?: boolean;
+  isCurrent?: boolean;
   profilePhoto: File | any;
   phoneNumber?: string;
+  emergencyPhoneNumber?: string;
   dateOfBirth?: Date;
   photoPath?: string;
   afterSubmit?: string;
@@ -24,12 +34,18 @@ export interface IEmployee {
 
 export interface IEmployeeForEdit {
   id?: number;
-  name?: string;
-  fatherName?: string;
+  englishFirstName?: string;
+  pashtoFirstName?: string;
+  englishSurName?: string;
+  pashtoSurName?: string;
+  englishFatherName?: string;
+  pashtoFatherName?: string;
+  englishGrandFatherName?: string;
+  pashtoGrandFatherName?: string;
   provinceId?: number;
   districtId?: number;
-  provinceName?: string,
-  districtName?: string,
+  provinceName?: string;
+  districtName?: string;
   tazkiraNo?: string;
   tazkiraTypeId?: number;
   joldNo?: string;
@@ -41,6 +57,7 @@ export interface IEmployeeForEdit {
   isInvestor?: boolean;
   profilePhoto: File | any;
   phoneNumber?: string;
+  emergencyPhoneNumber?: string;
   dateOfBirth?: Date;
   photoPath?: string;
 }
@@ -101,7 +118,6 @@ export interface IEmployeeDetails {
   isCurrent: boolean;
 }
 
-
 // ================== Employee Report ==========================
 export interface EmployeeAccountReport {
   departmentId?: number;
@@ -110,40 +126,38 @@ export interface EmployeeAccountReport {
   hasAccount?: boolean;
   needReport?: boolean;
   generateReportType?: string;
-
 }
 
-export interface EmployeeAccountReportResult{
+export interface EmployeeAccountReportResult {
   id: number;
-    firstName:string;
-    surName: string;
-    fullName: string;
-    fatherName: string;
-    grandFatherName: string;
-    genderName: string;
-    tazkiraNo: string;
-    dateOfBirth: string;
-    temporaryAddress: string;
-    permenantAddress: string;
-    departmentName: string;
-    provinceName: string;
-    employeeHealthState:string;
-    attendanceId: number;
-    bloodGroup: string;
-    personalEmail: string;
-    officialEmail: string;
-    phoneNumber: string;
-    photoPath: string;
-    hasAccount: boolean;
-    rfidNumber: number;
-    isCurrent: boolean;}
+  firstName: string;
+  surName: string;
+  fullName: string;
+  fatherName: string;
+  grandFatherName: string;
+  genderName: string;
+  tazkiraNo: string;
+  dateOfBirth: string;
+  temporaryAddress: string;
+  permenantAddress: string;
+  departmentName: string;
+  provinceName: string;
+  employeeHealthState: string;
+  attendanceId: number;
+  bloodGroup: string;
+  personalEmail: string;
+  officialEmail: string;
+  phoneNumber: string;
+  photoPath: string;
+  hasAccount: boolean;
+  rfidNumber: number;
+  isCurrent: boolean;
+}
 
-
-    export interface Iuser {
-      id?: string | undefined;
-      userName: string;
-      email?: string;
-      password?: string;
-      employeeId?: number;
-    }
-    
+export interface Iuser {
+  id?: string | undefined;
+  userName: string;
+  email?: string;
+  password?: string;
+  employeeId?: number;
+}
